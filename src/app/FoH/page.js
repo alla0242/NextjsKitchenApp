@@ -4,7 +4,8 @@ import Canvas from "../../Components/Canvas.js";
 import FohButton from "../../Components/FohButton.js";
 
 
-const uri = process.env.MONGODB_URI;
+const uri =
+  "mongodb+srv://allairemat:ZombieJesus9@drawingapp.so9q8oz.mongodb.net/?retryWrites=true&w=majority&appName=DrawingApp";
 
 
 export default function FoH({ onOrderFinished }) {
