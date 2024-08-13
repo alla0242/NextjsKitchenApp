@@ -6,7 +6,7 @@
       "use": "@vercel/next"
     },
     {
-      "src": "src/app/pages/**/*.js",
+      "src": "src/app/**/*.js",
       "use": "@vercel/node"
     }
   ],
