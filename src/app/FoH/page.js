@@ -3,10 +3,7 @@ import React, { useState, useEffect } from "react";
 import Canvas from "../../Components/Canvas.js";
 import FohButton from "../../Components/FohButton.js";
 
-
-const uri =
-  "mongodb+srv://allairemat:ZombieJesus9@drawingapp.so9q8oz.mongodb.net/?retryWrites=true&w=majority&appName=DrawingApp";
-
+const apiUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
 
 export default function FoH({ onOrderFinished }) {
   const [orders, setOrders] = useState([]);
@@ -29,12 +26,15 @@ export default function FoH({ onOrderFinished }) {
     return () => clearInterval(blinkInterval);
   }, []);
 
-  const apiUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
-
   function fetchOrders() {
+    console.log("Fetching latest images...");
     fetch(`/api/getLatestImages`)
-      .then((response) => response.json())
+      .then((response) => {
+        console.log("Response from /api/getLatestImages:", response);
+        return response.json();
+      })
       .then((data) => {
+        console.log("Data from /api/getLatestImages:", data);
         if (data.success && data.images) {
           setOrders(data.images);
         } else {
@@ -42,7 +42,7 @@ export default function FoH({ onOrderFinished }) {
         }
       })
       .catch((error) => {
-        console.error("Error:", error);
+        console.error("Error fetching latest images:", error);
       });
   }
 
@@ -60,6 +60,7 @@ export default function FoH({ onOrderFinished }) {
   }
 
   function updateOrderState(orderId, newState) {
+    console.log(`Updating order state for order ${orderId} to ${newState}...`);
     fetch(`/api/updateImageState`, {
       method: "PUT",
       headers: {
@@ -67,8 +68,12 @@ export default function FoH({ onOrderFinished }) {
       },
       body: JSON.stringify({ id: orderId, state: newState, source: "FoH" }),
     })
-      .then((response) => response.json())
+      .then((response) => {
+        console.log("Response from /api/updateImageState:", response);
+        return response.json();
+      })
       .then((data) => {
+        console.log("Data from /api/updateImageState:", data);
         if (data.success) {
           setOrders((prevOrders) =>
             prevOrders.map((order) =>
@@ -80,7 +85,7 @@ export default function FoH({ onOrderFinished }) {
         }
       })
       .catch((error) => {
-        console.error("Error:", error);
+        console.error("Error updating order state:", error);
       });
   }
 
@@ -108,6 +113,7 @@ export default function FoH({ onOrderFinished }) {
     // Format the timeTaken string
     const timeTakenString = `it took ${minutes} minutes and ${seconds} seconds for the order to be completed`;
 
+    console.log(`Finishing order ${orderId}...`);
     fetch(`/api/finishOrder`, {
       method: "POST",
       headers: {
@@ -115,8 +121,12 @@ export default function FoH({ onOrderFinished }) {
       },
       body: JSON.stringify({ id: orderId, timeTaken: timeTakenString }),
     })
-      .then((response) => response.json())
+      .then((response) => {
+        console.log("Response from /api/finishOrder:", response);
+        return response.json();
+      })
       .then((data) => {
+        console.log("Data from /api/finishOrder:", data);
         if (data.success) {
           setOrders((prevOrders) =>
             prevOrders.filter((order) => order.id !== orderId)
@@ -127,7 +137,7 @@ export default function FoH({ onOrderFinished }) {
         }
       })
       .catch((error) => {
-        console.error("Error:", error);
+        console.error("Error finishing order:", error);
       });
   }
 

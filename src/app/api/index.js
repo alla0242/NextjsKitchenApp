@@ -51,6 +51,7 @@ async function run() {
     }
 
     app.post("/api/saveImage", async (req, res) => {
+      console.log("Received request to /api/saveImage", req.body);
       const { imageData } = req.body;
       const timestamp = new Date();
       try {
@@ -61,7 +62,7 @@ async function run() {
         });
         res.json({ success: true, id: result.insertedId });
       } catch (error) {
-        console.error(error);
+        console.error("Error in /api/saveImage:", error);
         res
           .status(500)
           .json({ success: false, message: "Failed to save image" });
@@ -69,6 +70,7 @@ async function run() {
     });
 
     app.put("/api/updateImageState", async (req, res) => {
+      console.log("Received request to /api/updateImageState", req.body);
       const { id, state, source } = req.body;
       const changeTime = new Date();
       try {
@@ -88,7 +90,7 @@ async function run() {
           res.status(404).json({ success: false, message: "Image not found" });
         }
       } catch (error) {
-        console.error(error);
+        console.error("Error in /api/updateImageState:", error);
         res
           .status(500)
           .json({ success: false, message: "Failed to update image state" });
@@ -96,6 +98,7 @@ async function run() {
     });
 
     app.get("/api/getLatestImages", async (req, res) => {
+      console.log("Received request to /api/getLatestImages");
       try {
         const results = await collection
           .find()
@@ -115,7 +118,7 @@ async function run() {
           res.json({ success: false, message: "No new images found" });
         }
       } catch (error) {
-        console.error(error);
+        console.error("Error in /api/getLatestImages:", error);
         res
           .status(500)
           .json({ success: false, message: "Failed to retrieve images" });
@@ -123,6 +126,7 @@ async function run() {
     });
 
     app.post("/api/finishOrder", async (req, res) => {
+      console.log("Received request to /api/finishOrder", req.body);
       const { id, timeTaken } = req.body; // Get timeTaken from the request
       try {
         const order = await collection.findOne({ _id: new ObjectId(id) });
@@ -144,7 +148,7 @@ async function run() {
 
         res.json({ success: true });
       } catch (error) {
-        console.error(error);
+        console.error("Error in /api/finishOrder:", error);
         res
           .status(500)
           .json({ success: false, message: "Failed to finish order" });
