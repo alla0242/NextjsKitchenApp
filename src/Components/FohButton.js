@@ -1,10 +1,5 @@
 import React from "react";
 
-
-// const express =require('express')
-// const app = express()
-
-
 const FohButton = ({
     height,
     width,
@@ -28,7 +23,8 @@ const FohButton = ({
         }
 
         const imageData = canvas.toDataURL('image/png');
-        fetch('http://192.168.1.10:5150/api/saveImage', {
+        const apiUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
+        fetch(`${apiUrl}/api/saveImage`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

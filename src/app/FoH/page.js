@@ -4,7 +4,7 @@ import Canvas from "../../Components/Canvas.js";
 import FohButton from "../../Components/FohButton.js";
 
 
-// const uri = process.env.MONGODB_URI;
+const uri = process.env.MONGODB_URI;
 
 
 export default function FoH({ onOrderFinished }) {
@@ -28,8 +28,10 @@ export default function FoH({ onOrderFinished }) {
     return () => clearInterval(blinkInterval);
   }, []);
 
+  const apiUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
+
   function fetchOrders() {
-    fetch(`/api/getLatestImages`)
+    fetch(`http://localhost:5150/api/getLatestImages`)
       .then((response) => response.json())
       .then((data) => {
         if (data.success && data.images) {
@@ -57,7 +59,7 @@ export default function FoH({ onOrderFinished }) {
   }
 
   function updateOrderState(orderId, newState) {
-    fetch("/api/updateImageState", {
+    fetch(`http://localhost:5150/api/updateImageState`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
@@ -105,7 +107,7 @@ export default function FoH({ onOrderFinished }) {
     // Format the timeTaken string
     const timeTakenString = `it took ${minutes} minutes and ${seconds} seconds for the order to be completed`;
 
-    fetch("/api/finishOrder", {
+    fetch(`http://localhost:5150/api/finishOrder`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from "react";
 import BoHButtons from "../../Components/BoHButtons.js";
 
+const apiUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
 
 const BoH = ({ width, height }) => {
   const [latestImages, setLatestImages] = useState([]);
@@ -15,7 +16,7 @@ const BoH = ({ width, height }) => {
   }, []);
 
   function fetchLatestImages() {
-    fetch(`/api/getLatestImages`)
+    fetch(`${apiUrl}/api/getLatestImages`)
       .then((response) => response.json())
       .then((data) => {
         if (data.success && data.images) {
@@ -56,7 +57,7 @@ const BoH = ({ width, height }) => {
   }
 
   function updateImageState(id, newState) {
-    fetch(`/api/updateImageState`, {
+    fetch(`${apiUrl}/api/updateImageState`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",

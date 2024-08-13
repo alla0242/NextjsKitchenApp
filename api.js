@@ -5,7 +5,13 @@ const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb");
 const cors = require("cors");
 
 const app = express();
-app.use(cors());
+
+const corsOptions = {
+  origin: ['http://localhost:3000', 'https://your-vercel-domain.vercel.app'],
+  optionsSuccessStatus: 200,
+};
+
+app.use(cors(corsOptions));
 app.use(express.json({ limit: "50mb" }));
 
 const uri = process.env.MONGODB_URI;
@@ -28,6 +34,21 @@ async function run() {
 
     const db = client.db("DrawingApp");
     const collection = db.collection("images");
+
+    // Test connection to the database and collection
+    try {
+      await db.command({ ping: 1 });
+      console.log("Successfully connected to the DrawingApp database");
+
+      const testDoc = await collection.findOne();
+      if (testDoc) {
+        console.log("Successfully connected to the images collection");
+      } else {
+        console.log("Connected to the images collection, but it is empty");
+      }
+    } catch (testError) {
+      console.error("Failed to connect to the DrawingApp database or images collection", testError);
+    }
 
     app.post("/api/saveImage", async (req, res) => {
       const { imageData } = req.body;
@@ -129,16 +150,15 @@ async function run() {
           .json({ success: false, message: "Failed to finish order" });
       }
     });
+
+    const PORT = process.env.PORT || 5000;
+
+    app.listen(PORT, () => {
+      console.log("Server is running on port " + PORT);
+    });
   } catch (error) {
     console.error(error);
-  } finally {
-    // Close the client when the run function completes
-    await client.close();
   }
 }
 
-const PORT = process.env.PORT;
-
-app.listen(PORT, () => {
-  console.log("Server is running on port " + PORT);
-});
+run().catch(console.dir);
