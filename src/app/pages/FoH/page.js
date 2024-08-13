@@ -1,7 +1,7 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import Canvas from "../../Components/Canvas.js";
-import FohButton from "../../Components/FohButton.js";
+import Canvas from "../../../Components/Canvas.js";
+import FohButton from "../../../Components/FohButton.js";
 
 
 const uri =
