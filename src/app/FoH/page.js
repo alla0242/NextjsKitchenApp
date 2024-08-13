@@ -31,7 +31,7 @@ export default function FoH({ onOrderFinished }) {
   const apiUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
 
   function fetchOrders() {
-    fetch(`/api/getLatestImages`)
+    fetch(`http://localhost:5150/api/getLatestImages`)
       .then((response) => response.json())
       .then((data) => {
         if (data.success && data.images) {
