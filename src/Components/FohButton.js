@@ -24,7 +24,7 @@ const FohButton = ({
 
         const imageData = canvas.toDataURL('image/png');
         const apiUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
-        fetch(`${apiUrl}/api/saveImage`, {
+        fetch(`/api/saveImage`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

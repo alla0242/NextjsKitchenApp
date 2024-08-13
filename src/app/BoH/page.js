@@ -1,6 +1,6 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import BoHButtons from "../../../Components/BoHButtons.js";
+import BoHButtons from "../../Components/BoHButtons.js";
 
 const apiUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
 
