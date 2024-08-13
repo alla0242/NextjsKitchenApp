@@ -59,7 +59,7 @@ export default function FoH({ onOrderFinished }) {
   }
 
   function updateOrderState(orderId, newState) {
-    fetch(`http://localhost:5150/api/updateImageState`, {
+    fetch(`/api/updateImageState`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
@@ -107,7 +107,7 @@ export default function FoH({ onOrderFinished }) {
     // Format the timeTaken string
     const timeTakenString = `it took ${minutes} minutes and ${seconds} seconds for the order to be completed`;
 
-    fetch(`http://localhost:5150/api/finishOrder`, {
+    fetch(`/api/finishOrder`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
