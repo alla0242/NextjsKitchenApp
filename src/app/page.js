@@ -12,7 +12,7 @@ export default function Home() {
         <Link href="/BoH">
           <button className="large-button">Go to BoH</button>
         </Link>
-        <Link href="/AxiosTest">
+        <Link href="/axios">
           <button className="large-button">Go to Test</button>
         </Link>
       </div>
