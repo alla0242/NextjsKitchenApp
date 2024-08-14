@@ -8,26 +8,29 @@ const BoH = () => {
   const [lastCheckTime, setLastCheckTime] = useState(null);
 
   useEffect(() => {
-    fetchLatestImages();
-    const intervalId = setInterval(fetchLatestImages, 5000); // Poll every 5 seconds
+    fetchAndSetOrders();
+    const intervalId = setInterval(fetchAndSetOrders, 5000); // Poll every 5 seconds
 
     return () => clearInterval(intervalId); // Cleanup on component unmount
   }, []);
 
-  async function fetchLatestImages() {
+  async function fetchAndSetOrders() {
     try {
       const orders = await getOrders();
-      setOrders(orders);
-      setLastCheckTime(new Date());
     } catch (error) {
       console.error("Error fetching latest images:", error);
     }
   }
 
+  function updateStateWithOrders(orders) {
+    setOrders(orders);
+    setLastCheckTime(new Date());
+  }
+
   async function handleUpdateOrderState(id, newState) {
     try {
       await updateOrderState(id, newState);
-      await fetchLatestImages(); // Refresh orders after updating state
+      await fetchAndSetOrders(); // Refresh orders after updating state
     } catch (error) {
       console.error("Error updating order state:", error);
     }
@@ -80,7 +83,7 @@ const BoH = () => {
       ) : (
         <p>No orders up</p>
       )}
-      <button onClick={fetchLatestImages}>Refresh Images</button>
+      <button onClick={fetchAndSetOrders}>Refresh Images</button>
     </div>
   );
 };

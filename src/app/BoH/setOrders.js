@@ -6,11 +6,11 @@ async function updateOrderState(orderId, newState) {
   const client = new MongoClient(uri);
 
   await client.connect();
-  await client
+  const orders = await client
     .db("DrawingApp")
     .collection("images")
-    .updateOne({ _id: orderId }, { $set: { state: newState , lastChangeTime: new Date(), lastChangeSource: "BoH"}});
-  return;
+    .updateOne({ _id: orderId }, { $set: { state: newState ,lastChangeTime: new Date(), lastChangeSource: "BoH"}});
+  return orders;
 }
 
 export default updateOrderState;
