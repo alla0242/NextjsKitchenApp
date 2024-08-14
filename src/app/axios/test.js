@@ -7,8 +7,9 @@ async function run() {
 
   try {
     await client.connect();
-    const databases = await listDatabases(client);
-    return databases; // Return the result of listDatabases
+  const images = await client.db("DrawingApp").collection("images").find().toArray();
+  return images;
+
   } catch (error) {
     throw error; // Ensure errors are propagated
   } finally {
