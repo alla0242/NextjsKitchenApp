@@ -52,6 +52,7 @@ const AxiosTest = () => {
   return (
     <div>
       <h1>Test</h1>
+      <button onClick={fetchOne}>Fetch One</button>
       </div>
   );
 };
