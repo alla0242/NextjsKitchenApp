@@ -10,6 +10,8 @@ async function run() {
     await client.connect();
     console.log("Connected successfully to MongoDB");
     const databases = await listDatabases(client);
+    console.log("Databases fetched successfully:");
+    console.log(databases);
     return databases; // Return the result of listDatabases
   } catch (error) {
     console.error("Failed to connect to MongoDB", error);
