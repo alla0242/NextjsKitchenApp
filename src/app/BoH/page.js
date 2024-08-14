@@ -3,8 +3,6 @@ import React, { useState, useEffect } from "react";
 import BoHButtons from "../../Components/BoHButtons";
 import axios from "axios";
 
-const apiUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
-
 const BoH = ({ width, height }) => {
   const [latestImages, setLatestImages] = useState([]);
   const [lastCheckTime, setLastCheckTime] = useState(null);
@@ -31,19 +29,7 @@ const BoH = ({ width, height }) => {
       },
     });
 
-    const config = {
-      method: "post",
-      url: "https://data.mongodb-api.com/app/data-jywkgzt/endpoint/data/v1/action/find",
-      headers: {
-        "Content-Type": "application/json",
-        "Access-Control-Request-Headers": "*",
-        "api-key":
-          "pGhXRQXyJuYVoVGCEKZ820en3nlE6h4NINZP1EfBGy8PMCLCNl9JYhTeYhbxilMj",
-      },
-      data: data,
-    };
-
-    axios(config)
+    axios.post("/api/proxy", data)
       .then(function (response) {
         console.log(JSON.stringify(response.data));
         if (response.data.documents) {
@@ -97,9 +83,7 @@ const BoH = ({ width, height }) => {
     const axiosConfig = {
       headers: {
         "Content-Type": "application/json",
-        "Access-Control-Request-Headers": "*",
-        "api-key":
-          "pGhXRQXyJuYVoVGCEKZ820en3nlE6h4NINZP1EfBGy8PMCLCNl9JYhTeYhbxilMj",
+        "api-key": process.env.MONGODB_API_KEY,
       },
     };
 
