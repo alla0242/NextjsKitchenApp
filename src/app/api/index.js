@@ -170,6 +170,56 @@ async function run() {
       checkDbConnection,
       finishOrder,
     };
+
+    // Handle API requests
+    const express = require("express");
+    const app = express();
+
+    app.post("/api/getLatestImages", async (req, res) => {
+      console.log("Received request to /api/getLatestImages");
+      try {
+        const data = JSON.stringify({
+          collection: "images",
+          database: "DrawingApp",
+          dataSource: "DrawingApp",
+          sort: { timestamp: -1 },
+        });
+
+        const axiosConfig = {
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Request-Headers": "*",
+            "api-key": process.env.MONGODB_API_KEY,
+          },
+        };
+
+        const response = await axios.post(
+          "https://data.mongodb-api.com/app/data-jywkgzt/endpoint/data/v1/action/find",
+          data,
+          axiosConfig
+        );
+
+        if (response.data.success && response.data.documents) {
+          res.json({
+            success: true,
+            images: response.data.documents.map((image) => ({
+              ...image,
+              id: image._id.toString(),
+              timestamp: new Date(image.timestamp),
+            })),
+          });
+        } else {
+          res.json({ success: false, message: "No new images found" });
+        }
+      } catch (error) {
+        console.error("Error in /api/getLatestImages:", error);
+        res.status(500).json({ success: false, message: "Failed to retrieve images" });
+      }
+    });
+
+    app.listen(3000, () => {
+      console.log("Server is running on port 3000");
+    });
   } catch (error) {
     console.error(error);
   }

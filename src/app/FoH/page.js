@@ -36,8 +36,8 @@ export default function FoH({ onOrderFinished }) {
       })
       .then((data) => {
         console.log("Data from /api/getLatestImages:", data);
-        if (data.success && data.documents) {
-          setOrders(data.documents);
+        if (data.success && data.images) {
+          setOrders(data.images);
         } else {
           console.log("No orders found");
         }
