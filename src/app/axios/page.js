@@ -24,7 +24,7 @@
 // };
 
 // export default AxiosTest;
-
+"use client";
 const { MongoClient } = require("mongodb");
 
 
