@@ -1,8 +1,8 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import BoHButtons from "../../Components/BoHButtons";
+import getOrders from "./getOrders";
 
-const BoH = ({ width, height }) => {
+const BoH = () => {
   const [latestImages, setLatestImages] = useState([]);
   const [lastCheckTime, setLastCheckTime] = useState(null);
 
@@ -15,91 +15,61 @@ const BoH = ({ width, height }) => {
 
   async function fetchLatestImages() {
     try {
-      const response = await fetch("/api/getLatestImages", {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-      const data = await response.json();
-      if (data.documents) {
-        const newImages = data.documents.map((image) => ({
-          ...image,
-          id: image._id.toString(),
-          timestamp: new Date(image.timestamp),
-          lastChangeTime: new Date(image.lastChangeTime),
-        }));
-
-        // Sort the images to put "Ready for Pickup" at the end
-        newImages.sort((a, b) => {
-          if (a.state === "Ready for Pickup" && b.state !== "Ready for Pickup") {
-            return 1;
-          }
-          if (a.state !== "Ready for Pickup" && b.state === "Ready for Pickup") {
-            return -1;
-          }
-          return 0;
-        });
-
-        setLatestImages(newImages);
-      } else {
-        setLatestImages([]); // Clear images if no new images found
-        console.log("No new images found");
-      }
+      const orders = await getOrders();
+      setLatestImages(orders);
       setLastCheckTime(new Date());
     } catch (error) {
-      console.log(error);
-      setLastCheckTime(new Date());
+      console.error("Error fetching latest images:", error);
     }
   }
 
-  async function updateImageState(id, newState) {
-    const changeTime = new Date();
-    const data = {
-      collection: "images",
-      database: "DrawingApp",
-      dataSource: "DrawingApp",
-      filter: { _id: new ObjectId(id) },
-      update: {
-        $set: {
-          state: newState,
-          lastChangeTime: changeTime,
-          lastChangeSource: "BoH",
-        },
-      },
-    };
+  // async function updateImageState(id, newState) {
+  //   const changeTime = new Date();
+  //   const data = {
+  //     collection: "images",
+  //     database: "DrawingApp",
+  //     dataSource: "DrawingApp",
+  //     filter: { _id: new ObjectId(id) },
+  //     update: {
+  //       $set: {
+  //         state: newState,
+  //         lastChangeTime: changeTime,
+  //         lastChangeSource: "BoH",
+  //       },
+  //     },
+  //   };
 
-    try {
-      const response = await fetch("/api/updateImageState", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data),
-      });
-      const result = await response.json();
-      if (result.success) {
-        // Update the local state
-        setLatestImages((prevImages) =>
-          prevImages.map((image) =>
-            image.id === id
-              ? {
-                  ...image,
-                  state: newState,
-                  lastChangeTime: changeTime,
-                  lastChangeSource: "BoH",
-                }
-              : image
-          )
-        );
-        console.log(`Image ${id} state updated to ${newState}`);
-      } else {
-        console.error("Failed to update image state");
-      }
-    } catch (error) {
-      console.error("Error:", error);
-    }
-  }
+  //   try {
+  //     const response = await fetch("/api/updateImageState", {
+  //       method: "POST",
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //       },
+  //       body: JSON.stringify(data),
+  //     });
+  //     const result = await response.json();
+  //     if (result.success) {
+  //       // Update the local state
+  //       setLatestImages((prevImages) =>
+  //         prevImages.map((image) =>
+  //           image.id === id
+  //             ? {
+  //                 ...image,
+  //                 state: newState,
+  //                 lastChangeTime: changeTime,
+  //                 lastChangeSource: "BoH",
+  //               }
+  //             : image
+  //         )
+  //       );
+  //       console.log(`Image ${id} state updated to ${newState}`);
+  //     } else {
+  //       console.error("Failed to update image state");
+  //     }
+  //   } catch (error) {
+  //     console.error("Error:", error);
+  //   }
+  // }
 
   return (
     <div>
@@ -108,7 +78,6 @@ const BoH = ({ width, height }) => {
           ? `Looked for new orders at ${lastCheckTime.toLocaleTimeString()}`
           : "Waiting for first check..."}
       </h1>
-      <BoHButtons width={200} height={200} />
       {latestImages.length > 0 ? (
         <div>
           {latestImages.map((image, index) => (
@@ -131,7 +100,7 @@ const BoH = ({ width, height }) => {
               <p>Current State: {image.state}</p>
               <p>Last Change Source: {image.lastChangeSource}</p>
               <p>Last Change Time: {new Date(image.lastChangeTime).toLocaleString()}</p>
-              <button
+              {/* <button
                 onClick={() =>
                   updateImageState(image.id.toString(), "Ready for Pickup")
                 }
@@ -146,7 +115,7 @@ const BoH = ({ width, height }) => {
                 disabled={image.state === "Order at table"}
               >
                 Mark as Order at Table
-              </button>
+              </button> */}
             </div>
           ))}
         </div>
