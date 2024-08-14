@@ -26,7 +26,7 @@ const AxiosTest = () => {
     headers: {
       "Content-Type": "application/json",
       "Access-Control-Request-Headers": "*",
-      "Access-Control-Allow-Origin": "https://kitchen-red.vercel.app/",
+      "Access-Control-Allow-Origin": "*",
       "api-key":
         "pGhXRQXyJuYVoVGCEKZ820en3nlE6h4NINZP1EfBGy8PMCLCNl9JYhTeYhbxilMj",
     },
