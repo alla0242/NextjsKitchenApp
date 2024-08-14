@@ -5,6 +5,11 @@ var data = JSON.stringify({
   dataSource: "DrawingApp",
   projection: {
     _id: 1,
+    imageData: 1,
+    timestamp: 1,
+    state: 1,
+    lastChangeSource: 1,
+    lastChangeTime: 1,
   },
 });
 var config = {

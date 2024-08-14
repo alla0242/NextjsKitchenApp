@@ -37,7 +37,8 @@ const BoH = ({ width, height }) => {
       headers: {
         "Content-Type": "application/json",
         "Access-Control-Request-Headers": "*",
-        "api-key": process.env.MONGODB_API_KEY,
+        "api-key":
+          "pGhXRQXyJuYVoVGCEKZ820en3nlE6h4NINZP1EfBGy8PMCLCNl9JYhTeYhbxilMj",
       },
       data: data,
     };
@@ -97,7 +98,8 @@ const BoH = ({ width, height }) => {
       headers: {
         "Content-Type": "application/json",
         "Access-Control-Request-Headers": "*",
-        "api-key": process.env.MONGODB_API_KEY,
+        "api-key":
+          "pGhXRQXyJuYVoVGCEKZ820en3nlE6h4NINZP1EfBGy8PMCLCNl9JYhTeYhbxilMj",
       },
     };
 
