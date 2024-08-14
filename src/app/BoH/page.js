@@ -1,8 +1,6 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import BoHButtons from "../../Components/BoHButtons";
-import axios from "axios";
-
 var axios = require("axios");
 var data = JSON.stringify({
   collection: "pastOrders",
