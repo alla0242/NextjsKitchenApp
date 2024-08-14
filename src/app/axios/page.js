@@ -1,52 +1,68 @@
-"use client";
-import axios from "axios";
+// import { MongoClient } from "mongodb";
 
 
-const AxiosTest = () => {
+// async function run() {
+
+// const uri = process.env.MONGODB_URI;
+// const client = new MongoClient(uri);
+
+//   try {
+//     await client.connect();
+//     console.log("Connected successfully to MongoDB");
+//   } catch (error) {
+//     console.error("Failed to connect to MongoDB", error);
+//   }
+// }
+// const AxiosTest = () => {
+//   return (
+//     <div>
+//       <h1>Test</h1>
+//       <button onClick={_____}>Fetch One</button>
+//       FUUUUCK
+//     </div>
+//   );
+// };
+
+// export default AxiosTest;
+
+const { MongoClient } = require("mongodb");
 
 
+function AxiosTest() {
+  async function run() {
+    const uri =
+      "mongodb+srv://vercel-admin-user-66bcc8cb83ebb83e446851bb:hvBi8PHQ6sVd4Eeq@drawingapp.so9q8oz.mongodb.net/myFirstDatabase?retryWrites=true&w=majority";
+    const client = new MongoClient(uri);
 
-  function fetchOne() {
-  var data = JSON.stringify({
-    collection: "pastOrders",
-    database: "DrawingApp",
-    dataSource: "DrawingApp",
-    projection: {
-      _id: 1,
-      imageData: 1,
-      timestamp: 1,
-      state: 1,
-      lastChangeSource: 1,
-      lastChangeTime: 1,
-    },
-  });
-  var config = {
-    method: "post",
-    url: "https://data.mongodb-api.com/app/data-jywkgzt/endpoint/data/v1/action/findOne",
-    headers: {
-      "Content-Type": "application/json",
-      "Access-Control-Request-Headers": "*",
-      "Access-Control-Allow-Origin": "*",
-      "api-key":
-        "pGhXRQXyJuYVoVGCEKZ820en3nlE6h4NINZP1EfBGy8PMCLCNl9JYhTeYhbxilMj",
-    },
-    data: data,
-  };
-  axios(config)
-    .then(function (response) {
-      console.log(JSON.stringify(response.data));
-    })
-    .catch(function (error) {
-      console.log(error);
-    });
+    try {
+      await client.connect();
+      console.log("Connected successfully to MongoDB");
+      await listDatabases(client);
+    } catch (error) {
+      console.error("Failed to connect to MongoDB", error);
+    } finally {
+      await client.close();
+      console.log("Closed connection to MongoDB");
+    }
   }
+
+  run().catch(console.error);
+
+  async function listDatabases(client) {
+    databasesList = await client.db().admin().listDatabases();
+
+    console.log("Databases:");
+    databasesList.databases.forEach((db) => console.log(` - ${db.name}`));
+  }
+
   return (
     <div>
       <h1>Test</h1>
-      <button onClick={fetchOne}>Fetch One</button>
+      <button >Fetch One</button>
       FUUUUCK
-      </div>
+    </div>
   );
-};
+}
+
 
 export default AxiosTest;
