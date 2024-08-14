@@ -25,7 +25,6 @@
 
 // export default AxiosTest;
 'use client';
-const { MongoClient } = require("mongodb");
 import run from "./test";
 
 
