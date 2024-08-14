@@ -125,6 +125,18 @@ async function run() {
       }
     });
 
+    app.get("/api/checkDbConnection", async (req, res) => {
+      console.log("Received request to /api/checkDbConnection");
+      try {
+        await client.db("admin").command({ ping: 1 });
+        console.log("Successfully connected to MongoDB");
+        res.json({ success: true, message: "Successfully connected to MongoDB" });
+      } catch (error) {
+        console.error("Failed to connect to MongoDB", error);
+        res.status(500).json({ success: false, message: "Failed to connect to MongoDB" });
+      }
+    });
+
     app.post("/api/finishOrder", async (req, res) => {
       console.log("Received request to /api/finishOrder", req.body);
       const { id, timeTaken } = req.body; // Get timeTaken from the request
