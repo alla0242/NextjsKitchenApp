@@ -1,6 +1,5 @@
-require("dotenv").config();
+"use server";
 const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb");
-const axios = require("axios");
 
 const uri = process.env.MONGODB_URI;
 if (!uri) {
@@ -38,36 +37,18 @@ async function run() {
       console.error("Failed to connect to the DrawingApp database or images collection", testError);
     }
 
-    // Axios configuration
-    const axiosConfig = {
-      headers: {
-        "Content-Type": "application/json",
-        "Access-Control-Request-Headers": "*",
-        "api-key": process.env.MONGODB_API_KEY,
-      },
-    };
-
     // Save Image
     async function saveImage(imageData) {
       const timestamp = new Date();
-      const data = JSON.stringify({
-        collection: "images",
-        database: "DrawingApp",
-        dataSource: "DrawingApp",
-        document: {
-          imageData,
-          timestamp,
-          state: "Sent To Kitchen",
-        },
-      });
+      const document = {
+        imageData,
+        timestamp,
+        state: "Sent To Kitchen",
+      };
 
       try {
-        const response = await axios.post(
-          "https://data.mongodb-api.com/app/data-jywkgzt/endpoint/data/v1/action/insertOne",
-          data,
-          axiosConfig
-        );
-        return response.data;
+        const result = await collection.insertOne(document);
+        return result;
       } catch (error) {
         console.error("Error in saveImage:", error);
         throw new Error("Failed to save image");
@@ -77,27 +58,18 @@ async function run() {
     // Update Image State
     async function updateImageState(id, state, source) {
       const changeTime = new Date();
-      const data = JSON.stringify({
-        collection: "images",
-        database: "DrawingApp",
-        dataSource: "DrawingApp",
-        filter: { _id: new ObjectId(id) },
-        update: {
-          $set: {
-            state,
-            lastChangeTime: changeTime,
-            lastChangeSource: source,
-          },
+      const filter = { _id: new ObjectId(id) };
+      const update = {
+        $set: {
+          state,
+          lastChangeTime: changeTime,
+          lastChangeSource: source,
         },
-      });
+      };
 
       try {
-        const response = await axios.post(
-          "https://data.mongodb-api.com/app/data-jywkgzt/endpoint/data/v1/action/updateOne",
-          data,
-          axiosConfig
-        );
-        return response.data;
+        const result = await collection.updateOne(filter, update);
+        return result;
       } catch (error) {
         console.error("Error in updateImageState:", error);
         throw new Error("Failed to update image state");
@@ -106,20 +78,11 @@ async function run() {
 
     // Get Latest Images
     async function getLatestImages() {
-      const data = JSON.stringify({
-        collection: "images",
-        database: "DrawingApp",
-        dataSource: "DrawingApp",
-        sort: { timestamp: -1 },
-      });
+      const sort = { timestamp: -1 };
 
       try {
-        const response = await axios.post(
-          "https://data.mongodb-api.com/app/data-jywkgzt/endpoint/data/v1/action/find",
-          data,
-          axiosConfig
-        );
-        return response.data;
+        const result = await collection.find().sort(sort).toArray();
+        return result;
       } catch (error) {
         console.error("Error in getLatestImages:", error);
         throw new Error("Failed to retrieve images");
@@ -170,53 +133,6 @@ async function run() {
       checkDbConnection,
       finishOrder,
     };
-
-    // Handle API requests
-    const express = require("express");
-    const app = express();
-
-    app.post("/api/getLatestImages", async (req, res) => {
-      console.log("Received request to /api/getLatestImages");
-      try {
-        const data = JSON.stringify({
-          collection: "images",
-          database: "DrawingApp",
-          dataSource: "DrawingApp",
-          sort: { timestamp: -1 },
-        });
-
-        const axiosConfig = {
-          headers: {
-            "Content-Type": "application/json",
-            "Access-Control-Request-Headers": "*",
-            "api-key": process.env.MONGODB_API_KEY,
-          },
-        };
-
-        const response = await axios.post(
-          "https://data.mongodb-api.com/app/data-jywkgzt/endpoint/data/v1/action/find",
-          data,
-          axiosConfig
-        );
-
-        if (response.data.success && response.data.documents) {
-          res.json({
-            success: true,
-            images: response.data.documents.map((image) => ({
-              ...image,
-              id: image._id.toString(),
-              timestamp: new Date(image.timestamp),
-            })),
-          });
-        } else {
-          res.json({ success: false, message: "No new images found" });
-        }
-      } catch (error) {
-        console.error("Error in /api/getLatestImages:", error);
-        res.status(500).json({ success: false, message: "Failed to retrieve images" });
-      }
-    });
-
 
   } catch (error) {
     console.error(error);
