@@ -2,8 +2,7 @@
 import { MongoClient } from "mongodb";
 
 async function run() {
-  const uri =
-    "mongodb+srv://vercel-admin-user-66bcc8cb83ebb83e446851bb:hvBi8PHQ6sVd4Eeq@drawingapp.so9q8oz.mongodb.net/myFirstDatabase?retryWrites=true&w=majority";
+    const uri = process.env.MONGODB_URI;
   const client = new MongoClient(uri);
 
   try {
