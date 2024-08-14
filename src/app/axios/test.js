@@ -31,4 +31,9 @@ async function listDatabases(client) {
   }
 }
 
+async function getImages(client) {
+  const images = await client.db("DrawingApp").collection("images").find().toArray();
+  return images;
+}
+
 export default run;

@@ -23,6 +23,11 @@ function AxiosTest() {
           <li key={index}>{db.name}</li>
         ))}
       </ul>
+      <ul>
+        {images.map((image, index) => (
+          <li key={index}>{image.name}</li>
+        ))}
+      </ul>
     </div>
   );
 }
