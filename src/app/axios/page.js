@@ -46,7 +46,6 @@ function AxiosTest() {
     }
   }
 
-  run().catch(console.error);
 
   async function listDatabases(client) {
     databasesList = await client.db().admin().listDatabases();
@@ -58,7 +57,7 @@ function AxiosTest() {
   return (
     <div>
       <h1>Test</h1>
-      <button >Fetch One</button>
+      <button onClick={run}>Fetch One</button>
       FUUUUCK
     </div>
   );
