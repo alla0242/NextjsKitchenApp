@@ -1,6 +1,6 @@
 'use client';
 import { useState } from "react";
-import run from "./test";
+import getImages from "./test";
 
 function AxiosTest() {
   const [dbResults, setDbResults] = useState([]);
