@@ -27,18 +27,7 @@ const BoH = () => {
   async function handleUpdateOrderState(id, newState) {
     try {
       await updateOrderState(id, newState);
-      setOrders((prevOrders) =>
-        prevOrders.map((order) =>
-          order._id === id
-            ? {
-                ...order,
-                state: newState,
-                lastChangeTime: new Date(),
-                lastChangeSource: "BoH",
-              }
-            : order
-        )
-      );
+      await fetchLatestImages(); // Refresh orders after updating state
     } catch (error) {
       console.error("Error updating order state:", error);
     }
