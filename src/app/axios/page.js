@@ -7,7 +7,7 @@ function AxiosTest() {
 
   const handleClick = async () => {
     try {
-      const result = await run();
+      const result = await getImages();
       console.log(result);
       console.log(result.images);
       setDbResults(result.images); // Assuming result.images contains the list of images

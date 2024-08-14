@@ -1,36 +1,27 @@
 "use server";
-const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb");
+const { MongoClient, ObjectId } = require("mongodb");
 
 const uri = process.env.MONGODB_URI;
-if (!uri) {
-  console.error("MONGODB_URI environment variable is not set");
-  process.exit(1);
-}
+
   const client = new MongoClient(uri);
 
 
-async function run() {
-  try {
-    await client.connect();
-    console.log("Connected successfully to MongoDB");
 
     const db = client.db("DrawingApp");
     const collection = db.collection("images");
 
-    // Test connection to the database and collection
-    try {
-      await db.command({ ping: 1 });
-      console.log("Successfully connected to the DrawingApp database");
+    
+  async function getLatestImages() {
+    const sort = { timestamp: -1 };
 
-      const testDoc = await collection.findOne();
-      if (testDoc) {
-        console.log("Successfully connected to the images collection");
-      } else {
-        console.log("Connected to the images collection, but it is empty");
-      }
-    } catch (testError) {
-      console.error("Failed to connect to the DrawingApp database or images collection", testError);
+    try {
+      const result = await collection.find().sort(sort).toArray();
+      return result;
+    } catch (error) {
+      console.error("Error in getLatestImages:", error);
+      throw new Error("Failed to retrieve images");
     }
+  }
 
     // Save Image
     async function saveImage(imageData) {
@@ -71,31 +62,6 @@ async function run() {
       }
     }
 
-    // Get Latest Images
-    async function getLatestImages() {
-      const sort = { timestamp: -1 };
-
-      try {
-        const result = await collection.find().sort(sort).toArray();
-        return result;
-      } catch (error) {
-        console.error("Error in getLatestImages:", error);
-        throw new Error("Failed to retrieve images");
-      }
-    }
-
-    // Check DB Connection
-    async function checkDbConnection() {
-      try {
-        await client.db("admin").command({ ping: 1 });
-        console.log("Successfully connected to MongoDB");
-        return { success: true, message: "Successfully connected to MongoDB" };
-      } catch (error) {
-        console.error("Failed to connect to MongoDB", error);
-        throw new Error("Failed to connect to MongoDB");
-      }
-    }
-
     // Finish Order
     async function finishOrder(id, timeTaken) {
       try {
@@ -125,13 +91,8 @@ async function run() {
       saveImage,
       updateImageState,
       getLatestImages,
-      checkDbConnection,
       finishOrder,
     };
 
-  } catch (error) {
-    console.error(error);
-  }
-}
 
 run().catch(console.dir);
