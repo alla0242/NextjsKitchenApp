@@ -1,7 +1,6 @@
-module.exports = {
-  async headers() {
-    return [
-      {
+/** @type {import('next').NextConfig} */
+const nextConfig = {
+          
         // matching all API routes
         source: "/api/:path*",
         headers: [
@@ -17,7 +16,8 @@ module.exports = {
               "X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version",
           },
         ],
-      },
-    ];
-  },
+      
 };
+
+
+export default nextConfig;
