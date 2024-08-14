@@ -5,7 +5,7 @@ var data = JSON.stringify({
   dataSource: "DrawingApp",
   projection: {
     _id: 1,
-    // imageData: 1,
+    imageData: 1,
     timestamp: 1,
     state: 1,
     lastChangeSource: 1,
@@ -18,8 +18,7 @@ var config = {
   headers: {
     "Content-Type": "application/json",
     "Access-Control-Request-Headers": "*",
-    "api-key":
-      "pGhXRQXyJuYVoVGCEKZ820en3nlE6h4NINZP1EfBGy8PMCLCNl9JYhTeYhbxilMj",
+    "api-key": "pGhXRQXyJuYVoVGCEKZ820en3nlE6h4NINZP1EfBGy8PMCLCNl9JYhTeYhbxilMj",
   },
   data: data,
 };
@@ -30,3 +29,31 @@ axios(config)
   .catch(function (error) {
     console.log(error);
   });
+
+const AxiosTest = () => {
+
+
+
+  function fetchOne() {
+    const data = JSON.stringify({
+      collection: "pastOrders",
+      database: "DrawingApp",
+      dataSource: "DrawingApp",
+      projection: {
+        _id: 1,
+        imageData: 1,
+        timestamp: 1,
+        state: 1,
+        lastChangeSource: 1,
+        lastChangeTime: 1,
+      },
+    });
+  }
+  return (
+    <div>
+      <h1>Test</h1>
+      </div>
+  );
+};
+
+export default AxiosTest;
