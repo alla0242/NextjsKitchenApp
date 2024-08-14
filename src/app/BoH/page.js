@@ -92,8 +92,8 @@ const BoH = () => {
               <img
                 src={image.imageData}
                 alt={`Kitchen layout ${index + 1}`}
-                width={width}
-                height={height}
+                width={200}
+                height={200}
                 style={{ margin: "10px" }}
               />
               <p>Sent at: {new Date(image.timestamp).toLocaleString()}</p>
