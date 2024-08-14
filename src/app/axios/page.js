@@ -1,4 +1,5 @@
-var axios = require("axios");
+"use client";
+import axios from "axios";
 var data = JSON.stringify({
   collection: "pastOrders",
   database: "DrawingApp",
