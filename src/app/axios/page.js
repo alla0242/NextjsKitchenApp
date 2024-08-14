@@ -1,20 +1,28 @@
 'use client';
+import { useState } from "react";
 import run from "./test";
 
 function AxiosTest() {
+  const [dbResults, setDbResults] = useState([]);
+
+  const handleClick = async () => {
+    try {
+      const result = await run();
+      setDbResults(result.databases); // Assuming result.databases contains the list of databases
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+
   return (
     <div>
       <h1>Test</h1>
-      <button onClick={async () => {
-        try {
-          console.log("Fetching data...");
-          const result = await run();
-          console.log("Data fetched successfully:", result); // Log the result of run
-        } catch (error) {
-          console.error("Error fetching data:", error);
-        }
-      }}>Fetch One</button>
-      FUUUUCK
+      <button onClick={handleClick}>Fetch One</button>
+      <ul>
+        {dbResults.map((db, index) => (
+          <li key={index}>{db.name}</li>
+        ))}
+      </ul>
     </div>
   );
 }
