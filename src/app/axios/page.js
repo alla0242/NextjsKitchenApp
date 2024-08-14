@@ -57,7 +57,7 @@ function AxiosTest() {
   return (
     <div>
       <h1>Test</h1>
-      <button onClick={run}>Fetch One</button>
+      <button onClick={run()}>Fetch One</button>
       FUUUUCK
     </div>
   );
