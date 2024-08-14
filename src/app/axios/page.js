@@ -9,8 +9,8 @@ function AxiosTest() {
     try {
       const result = await getImages();
       console.log(result);
-      console.log(result.images);
-      setDbResults(result.images); // Assuming result.images contains the list of images
+      console.log(result.state);
+      setDbResults(result); // Assuming result.images contains the list of images
     } catch (error) {
       console.error("Error fetching data:", error);
     }
