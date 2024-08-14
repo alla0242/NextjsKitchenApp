@@ -3,7 +3,8 @@ import React, { useState, useEffect } from "react";
 import Canvas from "../../Components/Canvas.js";
 import FohButton from "../../Components/FohButton.js";
 
-const apiUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
+  const uri = process.env.MONGODB_URI;
+
 
 const FoH = () => {
   const [orders, setOrders] = useState([]);
@@ -14,7 +15,7 @@ const FoH = () => {
 
   async function fetchOrders() {
     try {
-      const response = await fetch(`${apiUrl}/api/getOrders`, {
+      const response = await fetch(`${uri}/api/getOrders`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -44,7 +45,7 @@ const FoH = () => {
     };
 
     try {
-      const response = await fetch(`${apiUrl}/api/updateOrderState`, {
+      const response = await fetch(`${uri}/api/updateOrderState`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

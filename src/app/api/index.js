@@ -6,13 +6,8 @@ if (!uri) {
   console.error("MONGODB_URI environment variable is not set");
   process.exit(1);
 }
-const client = new MongoClient(uri, {
-  serverApi: {
-    version: ServerApiVersion.v1,
-    strict: true,
-    deprecationErrors: true,
-  },
-});
+  const client = new MongoClient(uri);
+
 
 async function run() {
   try {
