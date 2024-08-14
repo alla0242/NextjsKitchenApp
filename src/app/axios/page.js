@@ -1,6 +1,6 @@
 'use client';
 import { useState } from "react";
-import getImages from "./test";
+import getOrders from "./test";
 
 function AxiosTest() {
   const [liveOrders, setLiveOrders] = useState([]);
