@@ -16,7 +16,7 @@ const BoH = ({ width, height }) => {
   async function fetchLatestImages() {
     try {
       const response = await fetch("/api/getLatestImages", {
-        method: "POST",
+        method: "GET",
         headers: {
           "Content-Type": "application/json",
         },
