@@ -3,13 +3,13 @@ import { useState } from "react";
 import getImages from "./test";
 
 function AxiosTest() {
-  const [dbResults, setDbResults] = useState([]);
+  const [liveOrders, setLiveOrders] = useState([]);
 
   const handleClick = async () => {
     try {
-      const result = await getImages();
-      console.log(`results`,result);
-      setDbResults(result); // Assuming result.images contains the list of images
+      const orders = await getOrders();
+      console.log(`results`,orders);
+      setLiveOrders(orders); // Assuming result.images contains the list of images
     } catch (error) {
       console.error("Error fetching data:", error);
     }
@@ -20,13 +20,16 @@ function AxiosTest() {
       <h1>Test</h1>
       <button onClick={handleClick}>Fetch One</button>
       <ul>
-        {console.log(`dbResults`, dbResults)}
-        {dbResults.map((image, index) => (
+        {console.log(`liveOrders`, liveOrders)}
+        {liveOrders.map((order, index) => (
           <li key={index}>
-            {image.state}
+            {order.state}
+            {order.timestamp}
+            {order.lastChangeTime}
+            {order.lastChangeSource}
             <img
               key={index}
-              src={image.imageData}
+              src={order.imageData}
               width={200}
               height={200}
             ></img>
