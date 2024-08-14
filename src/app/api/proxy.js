@@ -12,7 +12,8 @@ export default async function handler(req, res) {
     url: "https://data.mongodb-api.com/app/data-jywkgzt/endpoint/data/v1/action/find",
     headers: {
       "Content-Type": "application/json",
-      "api-key": process.env.MONGODB_API_KEY,
+      "api-key":
+        "pGhXRQXyJuYVoVGCEKZ820en3nlE6h4NINZP1EfBGy8PMCLCNl9JYhTeYhbxilMj",
     },
     data: body,
   };
