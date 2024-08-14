@@ -8,7 +8,7 @@ function AxiosTest() {
       <button onClick={async () => {
         try {
           const result = await run();
-          console.log(result);
+          console.log(result); // Log the result of run
         } catch (error) {
           console.error("Error fetching data:", error);
         }
