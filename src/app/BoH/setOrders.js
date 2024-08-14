@@ -9,7 +9,7 @@ async function updateOrderState(orderId, newState) {
   await client
     .db("DrawingApp")
     .collection("images")
-    .updateOne({ _id: orderId }, { $set: { state: newState } }, {$set: {lastChangeTime: new Date(), lastChangeSource: "BoH"}});
+    .updateOne({ _id: orderId }, { $set: { state: newState , lastChangeTime: new Date(), lastChangeSource: "BoH"}});
   return;
 }
 
