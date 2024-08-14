@@ -8,8 +8,7 @@ async function getImages() {
   try {
     await client.connect();
   const images = await client.db("DrawingApp").collection("images").find().toArray();
-  console.log(images);
-  console.log(images.length);
+  console.log("test",images);
   images.forEach((image) => {
     console.log(image.state);
     console.log(image.imageData);

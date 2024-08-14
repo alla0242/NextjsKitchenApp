@@ -22,7 +22,15 @@ function AxiosTest() {
       <ul>
         {console.log(`dbResults`, dbResults)}
         {dbResults.map((image, index) => (
-          <li key={index}>{image.state}</li>
+          <li key={index}>
+            {image.state}
+            <img
+              key={index}
+              src={image.imageData}
+              width={200}
+              height={200}
+            ></img>
+          </li>
         ))}
       </ul>
     </div>
