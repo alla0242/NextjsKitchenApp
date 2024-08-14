@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from "react";
 import Canvas from "../../Components/Canvas.js";
 import FohButton from "../../Components/FohButton.js";
+import axios from "axios";
 
 const apiUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
 
@@ -28,15 +29,15 @@ export default function FoH({ onOrderFinished }) {
 
   function fetchOrders() {
     console.log("Fetching latest images...");
-    fetch(`/api/getLatestImages`)
+    axios.post("/api/getLatestImages")
       .then((response) => {
-        console.log("Response from /api/getLatestImages:", response);
-        return response.json();
+        console.log("Response from /api/getLatestImages:", response.data);
+        return response.data;
       })
       .then((data) => {
         console.log("Data from /api/getLatestImages:", data);
-        if (data.success && data.images) {
-          setOrders(data.images);
+        if (data.success && data.documents) {
+          setOrders(data.documents);
         } else {
           console.log("No orders found");
         }
@@ -61,23 +62,21 @@ export default function FoH({ onOrderFinished }) {
 
   function updateOrderState(orderId, newState) {
     console.log(`Updating order state for order ${orderId} to ${newState}...`);
-    fetch(`/api/updateImageState`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ id: orderId, state: newState, source: "FoH" }),
+    axios.post("/api/updateImageState", {
+      id: orderId,
+      state: newState,
+      source: "FoH",
     })
       .then((response) => {
-        console.log("Response from /api/updateImageState:", response);
-        return response.json();
+        console.log("Response from /api/updateImageState:", response.data);
+        return response.data;
       })
       .then((data) => {
         console.log("Data from /api/updateImageState:", data);
         if (data.success) {
           setOrders((prevOrders) =>
             prevOrders.map((order) =>
-              order.id === orderId ? { ...order, state: newState } : order
+              order._id === orderId ? { ...order, state: newState } : order
             )
           );
         } else {
@@ -90,7 +89,7 @@ export default function FoH({ onOrderFinished }) {
   }
 
   function finishOrder(orderId) {
-    const orderToFinish = orders.find((order) => order.id === orderId);
+    const orderToFinish = orders.find((order) => order._id === orderId);
     if (!orderToFinish) return;
 
     const lastChangeTime = new Date();
@@ -114,22 +113,19 @@ export default function FoH({ onOrderFinished }) {
     const timeTakenString = `it took ${minutes} minutes and ${seconds} seconds for the order to be completed`;
 
     console.log(`Finishing order ${orderId}...`);
-    fetch(`/api/finishOrder`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ id: orderId, timeTaken: timeTakenString }),
+    axios.post("/api/finishOrder", {
+      id: orderId,
+      timeTaken: timeTakenString,
     })
       .then((response) => {
-        console.log("Response from /api/finishOrder:", response);
-        return response.json();
+        console.log("Response from /api/finishOrder:", response.data);
+        return response.data;
       })
       .then((data) => {
         console.log("Data from /api/finishOrder:", data);
         if (data.success) {
           setOrders((prevOrders) =>
-            prevOrders.filter((order) => order.id !== orderId)
+            prevOrders.filter((order) => order._id !== orderId)
           );
           onOrderFinished(); // Notify BoH to refresh
         } else {
@@ -174,7 +170,7 @@ export default function FoH({ onOrderFinished }) {
           <ul>
             {orders.map((order, index) => (
               <li
-                key={order.id}
+                key={order._id}
                 style={{ ...getOrderStyle(order.state), listStyle: "none" }}
               >
                 <details>
@@ -185,7 +181,7 @@ export default function FoH({ onOrderFinished }) {
                     Order {index + 1}: State: {order.state}, Time:{" "}
                     {new Date(order.timestamp).toLocaleString()}
                   </summary>
-                  {selectedOrder && selectedOrder.id === order.id && (
+                  {selectedOrder && selectedOrder._id === order._id && (
                     <div>
                       <img
                         src={order.imageData}
@@ -195,14 +191,14 @@ export default function FoH({ onOrderFinished }) {
                       {order.state !== "Order at table" && (
                         <button
                           onClick={() =>
-                            updateOrderState(order.id, "Order at table")
+                            updateOrderState(order._id, "Order at table")
                           }
                         >
                           Set to Order at Table
                         </button>
                       )}
                       {order.state === "Order at table" && (
-                        <button onClick={() => finishOrder(order.id)}>
+                        <button onClick={() => finishOrder(order._id)}>
                           Finish Order
                         </button>
                       )}

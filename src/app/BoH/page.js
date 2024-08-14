@@ -1,6 +1,7 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import BoHButtons from "../../Components/BoHButtons";
+import axios from "axios";
 
 const apiUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
 
@@ -16,13 +17,32 @@ const BoH = ({ width, height }) => {
   }, []);
 
   function fetchLatestImages() {
-    fetch(`/api/getLatestImages`)
-      .then((response) => response.json())
-      .then((data) => {
-        if (data.success && data.images) {
-          const newImages = data.images.map((image) => ({
+    const data = JSON.stringify({
+      collection: "images",
+      database: "DrawingApp",
+      dataSource: "DrawingApp",
+      sort: { timestamp: -1 },
+    });
+
+    const axiosConfig = {
+      headers: {
+        "Content-Type": "application/json",
+        "Access-Control-Request-Headers": "*",
+        "api-key": process.env.MONGODB_API_KEY,
+      },
+    };
+
+    axios
+      .post(
+        "https://data.mongodb-api.com/app/data-jywkgzt/endpoint/data/v1/action/find",
+        data,
+        axiosConfig
+      )
+      .then((response) => {
+        if (response.data.success && response.data.documents) {
+          const newImages = response.data.documents.map((image) => ({
             ...image,
-            id: image.id.toString(),
+            id: image._id.toString(),
             timestamp: new Date(image.timestamp),
           }));
 
@@ -57,16 +77,37 @@ const BoH = ({ width, height }) => {
   }
 
   function updateImageState(id, newState) {
-    fetch(`/api/updateImageState`, {
-      method: "PUT",
+    const changeTime = new Date();
+    const data = JSON.stringify({
+      collection: "images",
+      database: "DrawingApp",
+      dataSource: "DrawingApp",
+      filter: { _id: new ObjectId(id) },
+      update: {
+        $set: {
+          state: newState,
+          lastChangeTime: changeTime,
+          lastChangeSource: "BoH",
+        },
+      },
+    });
+
+    const axiosConfig = {
       headers: {
         "Content-Type": "application/json",
+        "Access-Control-Request-Headers": "*",
+        "api-key": process.env.MONGODB_API_KEY,
       },
-      body: JSON.stringify({ id, state: newState, source: "BoH" }),
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        if (data.success) {
+    };
+
+    axios
+      .post(
+        "https://data.mongodb-api.com/app/data-jywkgzt/endpoint/data/v1/action/updateOne",
+        data,
+        axiosConfig
+      )
+      .then((response) => {
+        if (response.data.success) {
           // Update the local state
           setLatestImages((prevImages) =>
             prevImages.map((image) =>
@@ -74,7 +115,7 @@ const BoH = ({ width, height }) => {
                 ? {
                     ...image,
                     state: newState,
-                    lastChangeTime: new Date(),
+                    lastChangeTime: changeTime,
                     lastChangeSource: "BoH",
                   }
                 : image

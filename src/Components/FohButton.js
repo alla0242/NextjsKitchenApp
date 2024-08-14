@@ -1,4 +1,5 @@
 import React from "react";
+import axios from "axios";
 
 const FohButton = ({
     height,
@@ -23,28 +24,20 @@ const FohButton = ({
         }
 
         const imageData = canvas.toDataURL('image/png');
-        const apiUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
-        fetch(`/api/saveImage`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ imageData }),
-        })
-        .then(response => response.json())
-        .then(data => {
-            console.log('Success:', data);
-            alert('Order sent to kitchen successfully!');
-            clearCanvas();
-            onSendToKitchen(); // Hide the order form
-        })
-        .catch((error) => {
-            console.error('Error:', error);
-            alert('Failed to send order to kitchen');
-        })
-        .finally(() => {
-            setLoading(false);
-        });
+        axios.post("/api/saveImage", { imageData })
+            .then((response) => {
+                console.log("Success:", response.data);
+                alert('Order sent to kitchen successfully!');
+                clearCanvas();
+                onSendToKitchen(); // Hide the order form
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+                alert('Failed to send order to kitchen');
+            })
+            .finally(() => {
+                setLoading(false);
+            });
     }
 
     function clearCanvas() {
@@ -59,7 +52,7 @@ const FohButton = ({
           height={height}
           width={width}
           id={"sendToKitchenButton"}
-          onMouseDown={sendToKitchen}
+          onClick={sendToKitchen}
           disabled={loading}
           className="large-button"
         >
@@ -68,7 +61,7 @@ const FohButton = ({
         <button
           height={height}
           width={width}
-          onMouseDown={clearCanvas}
+          onClick={clearCanvas}
           id={"clearButton"}
           disabled={loading}
           className="large-button"

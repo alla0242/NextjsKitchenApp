@@ -1,18 +1,6 @@
 require("dotenv").config();
-
-const express = require("express");
 const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb");
-const cors = require("cors");
-
-const app = express();
-
-const corsOptions = {
-  origin: ['http://localhost:3000', 'https://kitchen-red.vercel.app'],
-  optionsSuccessStatus: 200,
-};
-
-app.use(cors(corsOptions));
-app.use(express.json({ limit: "50mb" }));
+const axios = require("axios");
 
 const uri = process.env.MONGODB_URI;
 if (!uri) {
@@ -50,128 +38,138 @@ async function run() {
       console.error("Failed to connect to the DrawingApp database or images collection", testError);
     }
 
-    app.post("/api/saveImage", async (req, res) => {
-      console.log("Received request to /api/saveImage", req.body);
-      const { imageData } = req.body;
+    // Axios configuration
+    const axiosConfig = {
+      headers: {
+        "Content-Type": "application/json",
+        "Access-Control-Request-Headers": "*",
+        "api-key": process.env.MONGODB_API_KEY,
+      },
+    };
+
+    // Save Image
+    async function saveImage(imageData) {
       const timestamp = new Date();
-      try {
-        const result = await collection.insertOne({
+      const data = JSON.stringify({
+        collection: "images",
+        database: "DrawingApp",
+        dataSource: "DrawingApp",
+        document: {
           imageData,
           timestamp,
           state: "Sent To Kitchen",
-        });
-        res.json({ success: true, id: result.insertedId });
-      } catch (error) {
-        console.error("Error in /api/saveImage:", error);
-        res
-          .status(500)
-          .json({ success: false, message: "Failed to save image" });
-      }
-    });
+        },
+      });
 
-    app.put("/api/updateImageState", async (req, res) => {
-      console.log("Received request to /api/updateImageState", req.body);
-      const { id, state, source } = req.body;
-      const changeTime = new Date();
       try {
-        const result = await collection.updateOne(
-          { _id: new ObjectId(id) },
-          {
-            $set: {
-              state,
-              lastChangeTime: changeTime,
-              lastChangeSource: source,
-            },
-          }
+        const response = await axios.post(
+          "https://data.mongodb-api.com/app/data-jywkgzt/endpoint/data/v1/action/insertOne",
+          data,
+          axiosConfig
         );
-        if (result.modifiedCount === 1) {
-          res.json({ success: true });
-        } else {
-          res.status(404).json({ success: false, message: "Image not found" });
-        }
+        return response.data;
       } catch (error) {
-        console.error("Error in /api/updateImageState:", error);
-        res
-          .status(500)
-          .json({ success: false, message: "Failed to update image state" });
+        console.error("Error in saveImage:", error);
+        throw new Error("Failed to save image");
       }
-    });
+    }
 
-    app.get("/api/getLatestImages", async (req, res) => {
-      console.log("Received request to /api/getLatestImages");
+    // Update Image State
+    async function updateImageState(id, state, source) {
+      const changeTime = new Date();
+      const data = JSON.stringify({
+        collection: "images",
+        database: "DrawingApp",
+        dataSource: "DrawingApp",
+        filter: { _id: new ObjectId(id) },
+        update: {
+          $set: {
+            state,
+            lastChangeTime: changeTime,
+            lastChangeSource: source,
+          },
+        },
+      });
+
       try {
-        const results = await collection
-          .find()
-          .sort({ timestamp: -1 })
-          .toArray();
-        if (results.length > 0) {
-          res.json({
-            success: true,
-            images: results.map((result) => ({
-              id: result._id,
-              imageData: result.imageData,
-              timestamp: result.timestamp,
-              state: result.state,
-            })),
-          });
-        } else {
-          res.json({ success: false, message: "No new images found" });
-        }
+        const response = await axios.post(
+          "https://data.mongodb-api.com/app/data-jywkgzt/endpoint/data/v1/action/updateOne",
+          data,
+          axiosConfig
+        );
+        return response.data;
       } catch (error) {
-        console.error("Error in /api/getLatestImages:", error);
-        res
-          .status(500)
-          .json({ success: false, message: "Failed to retrieve images" });
+        console.error("Error in updateImageState:", error);
+        throw new Error("Failed to update image state");
       }
-    });
+    }
 
-    app.get("/api/checkDbConnection", async (req, res) => {
-      console.log("Received request to /api/checkDbConnection");
+    // Get Latest Images
+    async function getLatestImages() {
+      const data = JSON.stringify({
+        collection: "images",
+        database: "DrawingApp",
+        dataSource: "DrawingApp",
+        sort: { timestamp: -1 },
+      });
+
+      try {
+        const response = await axios.post(
+          "https://data.mongodb-api.com/app/data-jywkgzt/endpoint/data/v1/action/find",
+          data,
+          axiosConfig
+        );
+        return response.data;
+      } catch (error) {
+        console.error("Error in getLatestImages:", error);
+        throw new Error("Failed to retrieve images");
+      }
+    }
+
+    // Check DB Connection
+    async function checkDbConnection() {
       try {
         await client.db("admin").command({ ping: 1 });
         console.log("Successfully connected to MongoDB");
-        res.json({ success: true, message: "Successfully connected to MongoDB" });
+        return { success: true, message: "Successfully connected to MongoDB" };
       } catch (error) {
         console.error("Failed to connect to MongoDB", error);
-        res.status(500).json({ success: false, message: "Failed to connect to MongoDB" });
+        throw new Error("Failed to connect to MongoDB");
       }
-    });
+    }
 
-    app.post("/api/finishOrder", async (req, res) => {
-      console.log("Received request to /api/finishOrder", req.body);
-      const { id, timeTaken } = req.body; // Get timeTaken from the request
+    // Finish Order
+    async function finishOrder(id, timeTaken) {
       try {
         const order = await collection.findOne({ _id: new ObjectId(id) });
         if (!order) {
-          return res
-            .status(404)
-            .json({ success: false, message: "Order not found" });
+          throw new Error("Order not found");
         }
 
-        // Add the timeTaken to the order before moving it
         const orderToMove = {
           ...order,
-          timeTaken, // Store the time taken as a number (milliseconds)
+          timeTaken,
         };
 
         const pastOrdersCollection = db.collection("pastOrders");
         await pastOrdersCollection.insertOne(orderToMove);
         await collection.deleteOne({ _id: new ObjectId(id) });
 
-        res.json({ success: true });
+        return { success: true };
       } catch (error) {
-        console.error("Error in /api/finishOrder:", error);
-        res
-          .status(500)
-          .json({ success: false, message: "Failed to finish order" });
+        console.error("Error in finishOrder:", error);
+        throw new Error("Failed to finish order");
       }
-    });
+    }
 
-    const PORT = process.env.PORT || 5000;
-
-    app.listen(PORT, () => {
-      console.log("Server is running on port " + PORT);
-    });
+    // Export functions
+    module.exports = {
+      saveImage,
+      updateImageState,
+      getLatestImages,
+      checkDbConnection,
+      finishOrder,
+    };
   } catch (error) {
     console.error(error);
   }
