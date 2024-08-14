@@ -1,5 +1,4 @@
 import { MongoClient } from "mongodb";
-const { MongoClient } = require("mongodb");
 async function run() {
   const uri =
     "mongodb+srv://vercel-admin-user-66bcc8cb83ebb83e446851bb:hvBi8PHQ6sVd4Eeq@drawingapp.so9q8oz.mongodb.net/myFirstDatabase?retryWrites=true&w=majority";
