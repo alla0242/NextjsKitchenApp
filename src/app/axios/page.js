@@ -8,7 +8,6 @@ function AxiosTest() {
   const handleClick = async () => {
     try {
       const orders = await getOrders();
-      console.log(`results`,orders);
       setLiveOrders(orders); // Assuming result.images contains the list of images
     } catch (error) {
       console.error("Error fetching data:", error);
@@ -24,8 +23,8 @@ function AxiosTest() {
         {liveOrders.map((order, index) => (
           <li key={index}>
             {order.state}
-            {order.timestamp}
-            {order.lastChangeTime}
+            {order.timestamp.toString()}
+            {order.lastChangeTime.toString()}
             {order.lastChangeSource}
             <img
               key={index}
