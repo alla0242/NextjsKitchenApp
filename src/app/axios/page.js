@@ -21,8 +21,9 @@ function AxiosTest() {
       <h1>Test</h1>
       <button onClick={handleClick}>Fetch One</button>
       <ul>
+        {console.log(dbResults)}
         {dbResults.map((image, index) => (
-          <li key={index}>{image.name}</li>
+          <li key={index}>{image.state}</li>
         ))}
       </ul>
     </div>
