@@ -18,46 +18,47 @@ const BoH = ({ width, height }) => {
 
   function fetchLatestImages() {
     const data = JSON.stringify({
-      collection: "images",
+      collection: "pastOrders",
       database: "DrawingApp",
       dataSource: "DrawingApp",
-      sort: { timestamp: -1 },
+      projection: {
+        _id: 1,
+        imageData: 1,
+        timestamp: 1,
+        state: 1,
+        lastChangeSource: 1,
+        lastChangeTime: 1,
+      },
     });
 
-    const axiosConfig = {
+    const config = {
+      method: "post",
+      url: "https://data.mongodb-api.com/app/data-jywkgzt/endpoint/data/v1/action/find",
       headers: {
         "Content-Type": "application/json",
         "Access-Control-Request-Headers": "*",
         "api-key": process.env.MONGODB_API_KEY,
       },
+      data: data,
     };
 
-    axios
-      .post(
-        "https://data.mongodb-api.com/app/data-jywkgzt/endpoint/data/v1/action/find",
-        data,
-        axiosConfig
-      )
-      .then((response) => {
-        if (response.data.success && response.data.documents) {
+    axios(config)
+      .then(function (response) {
+        console.log(JSON.stringify(response.data));
+        if (response.data.documents) {
           const newImages = response.data.documents.map((image) => ({
             ...image,
             id: image._id.toString(),
             timestamp: new Date(image.timestamp),
+            lastChangeTime: new Date(image.lastChangeTime),
           }));
 
           // Sort the images to put "Ready for Pickup" at the end
           newImages.sort((a, b) => {
-            if (
-              a.state === "Ready for Pickup" &&
-              b.state !== "Ready for Pickup"
-            ) {
+            if (a.state === "Ready for Pickup" && b.state !== "Ready for Pickup") {
               return 1;
             }
-            if (
-              a.state !== "Ready for Pickup" &&
-              b.state === "Ready for Pickup"
-            ) {
+            if (a.state !== "Ready for Pickup" && b.state === "Ready for Pickup") {
               return -1;
             }
             return 0;
@@ -70,8 +71,8 @@ const BoH = ({ width, height }) => {
         }
         setLastCheckTime(new Date());
       })
-      .catch((error) => {
-        console.error("Error:", error);
+      .catch(function (error) {
+        console.log(error);
         setLastCheckTime(new Date());
       });
   }
@@ -159,6 +160,8 @@ const BoH = ({ width, height }) => {
               />
               <p>Sent at: {new Date(image.timestamp).toLocaleString()}</p>
               <p>Current State: {image.state}</p>
+              <p>Last Change Source: {image.lastChangeSource}</p>
+              <p>Last Change Time: {new Date(image.lastChangeTime).toLocaleString()}</p>
               <button
                 onClick={() =>
                   updateImageState(image.id.toString(), "Ready for Pickup")
