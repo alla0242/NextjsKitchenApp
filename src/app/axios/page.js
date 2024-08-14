@@ -23,8 +23,8 @@ function AxiosTest() {
         {liveOrders.map((order, index) => (
           <li key={index}>
             {order.state}
-            {order.timestamp.toString()}
-            {order.lastChangeTime.toString()}
+            {new Date(order.timestamp).toString()}
+            {new Date(order.lastChangeTime).toString()}
             {order.lastChangeSource}
             <img
               key={index}
