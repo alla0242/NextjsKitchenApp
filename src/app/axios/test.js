@@ -1,3 +1,4 @@
+"use server"
 import { MongoClient } from "mongodb";
 async function run() {
   const uri =
