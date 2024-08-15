@@ -1,5 +1,5 @@
 "use server";
-import { MongoClient } from "mongodb";
+import { MongoClient, ObjectId } from "mongodb";
 
 async function updateOrderState(orderId, newState) {
   const uri = process.env.MONGODB_URI;
@@ -14,12 +14,12 @@ async function updateOrderState(orderId, newState) {
       .db("DrawingApp")
       .collection("images")
       .updateOne(
-        { _id: orderId },
+        { _id: new ObjectId(orderId) },
         { $set: { state: newState, lastChangeTime: new Date(), lastChangeSource: "BoH" } }
       );
       
-      console.log("Order updated:", result);
-      return result;
+    console.log("Order updated:", result);
+    return result;
   } catch (error) {
     console.error("Error updating order state:", error);
   } finally {
