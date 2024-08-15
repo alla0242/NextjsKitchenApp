@@ -9,6 +9,7 @@ import completeOrder from "./completeOrder.js";
 const FoH = () => {
   const [orders, setOrders] = useState([]);
   const [lastCheckTime, setLastCheckTime] = useState(null);
+  const [isNewOrderOpen, setIsNewOrderOpen] = useState(false);
 
   function saveImage() {
     const canvas = document.getElementById("canvas");
@@ -88,6 +89,21 @@ const FoH = () => {
     }
   }
 
+  useEffect(() => {
+    const detailsElements = document.querySelectorAll("details");
+    detailsElements.forEach((details) => {
+      details.addEventListener("toggle", (event) => {
+        if (details.open) {
+          detailsElements.forEach((el) => {
+            if (el !== details) {
+              el.removeAttribute("open");
+            }
+          });
+        }
+      });
+    });
+  }, [orders]);
+
   return (
     <div className="h-screen w-screen">
       <h1>
@@ -95,21 +111,21 @@ const FoH = () => {
           ? `Looked for new orders at ${lastCheckTime.toLocaleTimeString()}`
           : "Waiting for first check..."}
       </h1>
-      <details>
-        <summary>New Order</summary>
+      <details open={isNewOrderOpen} onToggle={() => setIsNewOrderOpen(!isNewOrderOpen)}>
+        <summary>{isNewOrderOpen ? "Hide Notepad" : "New Order"}</summary>
         <Canvas width={400} height={700} />
-      <button
-        className="large-button bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-700"
-        onClick={() => clearCanvas()}
-      >
-        Clear
-      </button>
-      <button
-        className="large-button bg-green-500 text-white py-2 px-4 rounded hover:bg-green-700"
-        onClick={() => saveImage()}
-      >
-        Send to Kitchen
-      </button>
+        <button
+          className="large-button bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-700"
+          onClick={() => clearCanvas()}
+        >
+          Clear
+        </button>
+        <button
+          className="large-button bg-green-500 text-white py-2 px-4 rounded hover:bg-green-700"
+          onClick={() => saveImage()}
+        >
+          Send to Kitchen
+        </button>
       </details>
       {orders.length > 0 ? (
         <ol className="list-decimal">
