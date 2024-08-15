@@ -10,6 +10,13 @@ import updateOrderState from "../BoH/setOrders.js";
 const FoH = () => {
   const [orders, setOrders] = useState([]);
 
+ useEffect(() => {
+   fetchLatestImages();
+   const intervalId = setInterval(fetchLatestImages, 5000); // Poll every 5 seconds
+
+   return () => clearInterval(intervalId); // Cleanup on component unmount
+ }, []);
+
   useEffect(() => {
     fetchOrders();
   }, []);
