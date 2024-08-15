@@ -13,6 +13,9 @@ async function completeOrder(orderId, newState) {
     const timeTaken = await timeBetweenCreationAndCompletion(orderId);
     console.log("Time taken for order completion:", timeTaken);
 
+    const minutes = Math.floor(timeTaken / 60000);
+    const seconds = Math.floor((timeTaken % 60000) / 1000);
+
     const updateStateToCompleted = await client
       .db("DrawingApp")
       .collection("images")
@@ -23,7 +26,7 @@ async function completeOrder(orderId, newState) {
             state: newState,
             lastChangeTime: new Date(),
             lastChangeSource: "FoH",
-            timeTaken: timeTaken,
+            timeTaken: `it took ${minutes} minutes and ${seconds} seconds to complete the order`,
           },
         }
       );
