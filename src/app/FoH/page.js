@@ -95,8 +95,9 @@ const FoH = () => {
           ? `Looked for new orders at ${lastCheckTime.toLocaleTimeString()}`
           : "Waiting for first check..."}
       </h1>
-      <h2>Front of House</h2>
-      <Canvas width={400} height={700} />
+      <details>
+        <summary>New Order</summary>
+        <Canvas width={400} height={700} />
       <button
         className="large-button bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-700"
         onClick={() => clearCanvas()}
@@ -109,6 +110,7 @@ const FoH = () => {
       >
         Send to Kitchen
       </button>
+      </details>
       {orders.length > 0 ? (
         <ol className="list-decimal">
           {orders.map((order, index) => (
