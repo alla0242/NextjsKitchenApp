@@ -144,7 +144,10 @@ const FoH = () => {
                   : ""
                   
               }
-              className="p-3"
+              style={{
+                border: "1px solid #ccc",
+                padding: "10px",
+              }}
             >
               <details>
                 <summary>
