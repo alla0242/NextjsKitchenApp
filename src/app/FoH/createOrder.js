@@ -2,7 +2,6 @@
 
 
 export async function sendToKitchen() {
-  setLoading(true);
   const canvas = document.getElementById("canvas");
   const ctx = canvas.getContext("2d");
   const blank = document.createElement("canvas");
@@ -26,8 +25,6 @@ export async function sendToKitchen() {
     .then((response) => {
       console.log("Success:", response.data);
       alert("Order sent to kitchen successfully!");
-      clearCanvas();
-      onSendToKitchen(); // Hide the order form
     })
     .catch((error) => {
       console.error("Error:", error);
@@ -37,8 +34,5 @@ export async function sendToKitchen() {
     });
 }
 
-export async function clearCanvas() {
-  const canvas = document.getElementById("canvas");
-  const ctx = canvas.getContext("2d");
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-}
+
+export default sendToKitchen;
