@@ -7,7 +7,7 @@ export async function sendToKitchen(imageData) {
       const uri = process.env.MONGODB_URI;
       const client = new MongoClient(uri);
       await client.connect();
-      const collection = client.db("DrawingApp").collection("test");
+      const collection = client.db("DrawingApp").collection("images");
       const order = {
         imageData,
         state: "Sent to Kitchen",
@@ -15,7 +15,6 @@ export async function sendToKitchen(imageData) {
       };
       await collection.insertOne(order);
       await client.close();
-    console.log(imageData);
 }
 
 
