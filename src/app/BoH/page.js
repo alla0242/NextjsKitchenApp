@@ -60,18 +60,22 @@ const BoH = () => {
               />
               <p>Sent at: {new Date(order.timestamp).toLocaleString()}</p>
               <p>Current State: {order.state}</p>
-              <p>Last Change Source: {order.lastChangeSource}</p>
-              <p>Last Change Time: {new Date(order.lastChangeTime).toLocaleString()}</p>
               {order.state !== "Ready for Pickup" && (
                 <button
-                  onClick={() => handleUpdateOrderState(order._id, "Ready for Pickup")}
+                  className="large-button bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-700"
+                  onClick={() =>
+                    handleUpdateOrderState(order._id, "Ready for Pickup")
+                  }
                 >
                   Mark as Ready for Pickup
                 </button>
               )}
               {order.state !== "Order at table" && (
                 <button
-                  onClick={() => handleUpdateOrderState(order._id, "Order at table")}
+                  className="large-button bg-green-500 text-white py-2 px-4 rounded hover:bg-green-700"
+                  onClick={() =>
+                    handleUpdateOrderState(order._id, "Order at table")
+                  }
                 >
                   Mark as Order at Table
                 </button>
