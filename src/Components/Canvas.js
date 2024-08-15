@@ -70,4 +70,5 @@ export default Canvas;
 
 const canvasStyle = {
   border: "1px solid black",
+  backgroundColor: "white",
 };
