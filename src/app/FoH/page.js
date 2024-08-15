@@ -28,7 +28,6 @@ const FoH = () => {
     <div>
       <h1>Front of House</h1>
       <Canvas />
-      <FohButton />
       {orders.length > 0 ? (
         <div>
           {orders.map((order, index) => (
