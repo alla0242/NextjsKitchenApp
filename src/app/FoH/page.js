@@ -1,21 +1,22 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import Canvas from "../../Components/Canvas.js";
-import {sendToKitchen, clearCanvas} from "./createOrder.js";
+import { sendToKitchen, clearCanvas } from "./createOrder.js";
 import getOrders from "../BoH/getOrders.js";
 import updateOrderState from "../BoH/setOrders.js";
-  const uri = process.env.MONGODB_URI;
 
+const uri = process.env.MONGODB_URI;
 
 const FoH = () => {
   const [orders, setOrders] = useState([]);
+  const [lastCheckTime, setLastCheckTime] = useState(null);
 
- useEffect(() => {
-   fetchLatestImages();
-   const intervalId = setInterval(fetchLatestImages, 5000); // Poll every 5 seconds
+  useEffect(() => {
+    fetchLatestImages();
+    const intervalId = setInterval(fetchLatestImages, 5000); // Poll every 5 seconds
 
-   return () => clearInterval(intervalId); // Cleanup on component unmount
- }, []);
+    return () => clearInterval(intervalId); // Cleanup on component unmount
+  }, []);
 
   useEffect(() => {
     fetchOrders();
@@ -28,6 +29,15 @@ const FoH = () => {
       setLastCheckTime(new Date());
     } catch (error) {
       console.error("Error fetching latest images:", error);
+    }
+  }
+
+  async function fetchOrders() {
+    try {
+      const orders = await getOrders();
+      setOrders(orders);
+    } catch (error) {
+      console.error("Error fetching orders:", error);
     }
   }
 
