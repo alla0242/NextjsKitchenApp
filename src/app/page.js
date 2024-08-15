@@ -5,10 +5,10 @@ export default function Home() {
     <main className="flex min-h-screen flex-col items-center justify-between p-24">
       <h1>Hello World</h1>
       <div>
-        <Link href="/FoH">
+        <Link href="/FoH" className="large-button">
           <button className="large-button">Go to FoH</button>
         </Link>
-        <Link href="/BoH">
+        <Link href="/BoH" className="large-button">
           <button className="large-button">Go to BoH</button>
         </Link>
 

@@ -14,10 +14,8 @@ export async function sendToKitchen(imageData) {
       timestamp: new Date(),
     };
     await collection.insertOne(order);
-    alert("Order sent to kitchen");
   } catch (error) {
     console.error("Error sending order to kitchen:", error);
-    alert("Failed to send order to kitchen");
   } finally {
     await client.close();
   }
