@@ -10,7 +10,7 @@ const uri = process.env.MONGODB_URI;
     const db = client.db("DrawingApp");
     const collection = db.collection("images");
 
-    
+
   async function getLatestImages() {
     const sort = { timestamp: -1 };
 
@@ -41,27 +41,7 @@ const uri = process.env.MONGODB_URI;
       }
     }
 
-    // Update Image State
-    async function updateImageState(id, state, source) {
-      const changeTime = new Date();
-      const filter = { _id: new ObjectId(id) };
-      const update = {
-        $set: {
-          state,
-          lastChangeTime: changeTime,
-          lastChangeSource: source,
-        },
-      };
-
-      try {
-        const result = await collection.updateOne(filter, update);
-        return result;
-      } catch (error) {
-        console.error("Error in updateImageState:", error);
-        throw new Error("Failed to update image state");
-      }
-    }
-
+    // Update Image Stat
     // Finish Order
     async function finishOrder(id, timeTaken) {
       try {
@@ -89,7 +69,6 @@ const uri = process.env.MONGODB_URI;
     // Export functions
     module.exports = {
       saveImage,
-      updateImageState,
       getLatestImages,
       finishOrder,
     };
