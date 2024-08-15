@@ -34,7 +34,7 @@ const BoH = () => {
   }
 
   return (
-    <div>
+    <div className="flex-col min-h-screen flex-col">
       <h1>
         {lastCheckTime
           ? `Looked for new orders at ${lastCheckTime.toLocaleTimeString()}`

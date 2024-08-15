@@ -112,8 +112,8 @@ const FoH = () => {
           : "Waiting for first check..."}
       </h1>
       <details open={isNewOrderOpen} onToggle={() => setIsNewOrderOpen(!isNewOrderOpen)}>
-        <summary>{isNewOrderOpen ? "Hide Notepad" : "New Order"}</summary>
-        <Canvas width={400} height={700} />
+        <summary className="text-2xl font-bold justify-center">{isNewOrderOpen ? "Hide Notepad" : "New Order"}</summary>
+        <Canvas width={370} height={700} />
         <button
           className="large-button bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-700"
           onClick={() => clearCanvas()}
