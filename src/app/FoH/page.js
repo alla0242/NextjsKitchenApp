@@ -131,15 +131,17 @@ const FoH = () => {
                   Order #{index + 1}
                   State: {order.state}
                 </summary>
-                <img src={order.image} alt="Order Image" />
-                <button
-                  className="large-button bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-700"
-                  onClick={() =>
-                    handleUpdateOrderState(order._id, "Order at Table")
-                  }
-                >
-                  Order at Table
-                </button>
+                <img src={order.imageData} alt="Order Image" />
+                {order.state !== "Order at Table" && (
+                  <button
+                    className="large-button bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-700"
+                    onClick={() =>
+                      handleUpdateOrderState(order._id, "Order at Table")
+                    }
+                  >
+                    Order at Table
+                  </button>
+                )}
                 {order.state === "Order at Table" && (
                   <button
                     className="large-button bg-green-500 text-white py-2 px-4 rounded hover:bg-green-700"
