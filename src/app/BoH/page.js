@@ -41,9 +41,10 @@ const BoH = () => {
           : "Waiting for first check..."}
       </h1>
       {orders.length > 0 ? (
-        <div>
+        <div className="flex flex-wrap">
           {orders.map((order, index) => (
             <div
+              className="flex flex-col items-center max-w-fit"
               key={index}
               style={{
                 margin: "20px 0",
