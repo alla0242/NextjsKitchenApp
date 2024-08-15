@@ -4,7 +4,7 @@ import { MongoClient } from "mongodb";
 async function updateOrderState(orderId, newState) {
   const uri = process.env.MONGODB_URI;
   const client = new MongoClient(uri);
-
+  console.log(orderId, newState);
   try {
     await client.connect();
     await client
