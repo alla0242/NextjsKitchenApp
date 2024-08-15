@@ -4,13 +4,14 @@ import { MongoClient, ObjectId } from "mongodb";
 async function completeOrder(orderId, newState) {
   const uri = process.env.MONGODB_URI;
   const client = new MongoClient(uri);
-  console.log("updateOrderState called with:", orderId, newState);
+  console.log("completeOrder called with:", orderId, newState);
 
   try {
     await client.connect();
     console.log("Connected to MongoDB");
 
     const timeTaken = await timeBetweenCreationAndCompletion(orderId);
+    console.log("Time taken for order completion:", timeTaken);
 
     const updateStateToCompleted = await client
       .db("DrawingApp")
@@ -26,21 +27,25 @@ async function completeOrder(orderId, newState) {
           },
         }
       );
+    console.log("Order state updated:", updateStateToCompleted);
 
     const getCompletedOrder = await client
       .db("DrawingApp")
       .collection("images")
       .findOne({ _id: new ObjectId(orderId) });
+    console.log("Retrieved completed order:", getCompletedOrder);
 
-    await client
+    const insertResult = await client
       .db("DrawingApp")
       .collection("pastOrders")
       .insertOne(getCompletedOrder);
+    console.log("Inserted order into pastOrders:", insertResult);
 
-    await client
+    const deleteResult = await client
       .db("DrawingApp")
       .collection("images")
       .deleteOne({ _id: new ObjectId(orderId) });
+    console.log("Deleted order from images:", deleteResult);
 
     return updateStateToCompleted;
   } catch (error) {
@@ -54,6 +59,7 @@ async function completeOrder(orderId, newState) {
 async function timeBetweenCreationAndCompletion(orderId) {
   const uri = process.env.MONGODB_URI;
   const client = new MongoClient(uri);
+  console.log("Calculating time between creation and completion for order:", orderId);
 
   try {
     await client.connect();
@@ -61,9 +67,11 @@ async function timeBetweenCreationAndCompletion(orderId) {
       .db("DrawingApp")
       .collection("images")
       .findOne({ _id: new ObjectId(orderId) });
+    console.log("Order retrieved for time calculation:", order);
     return new Date().getTime() - order.timestamp.getTime();
   } finally {
     await client.close();
+    console.log("MongoDB connection closed after time calculation");
   }
 }
 
