@@ -84,7 +84,7 @@ const FoH = () => {
   }
 
   return (
-    <div>
+    <div className="h-screen w-screen">
       <h1>
         {lastCheckTime
           ? `Looked for new orders at ${lastCheckTime.toLocaleTimeString()}`
