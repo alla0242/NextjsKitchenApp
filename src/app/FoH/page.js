@@ -5,7 +5,6 @@ import { sendToKitchen, clearCanvas } from "./createOrder.js";
 import getOrders from "../BoH/getOrders.js";
 import updateOrderState from "../BoH/setOrders.js";
 
-const uri = process.env.MONGODB_URI;
 
 const FoH = () => {
   const [orders, setOrders] = useState([]);
@@ -43,8 +42,15 @@ const FoH = () => {
 
   return (
     <div>
-      <h1>Front of House</h1>
+      <h1>
+        {lastCheckTime
+          ? `Looked for new orders at ${lastCheckTime.toLocaleTimeString()}`
+          : "Waiting for first check..."}
+      </h1>
+      <h2>Front of House</h2>
       <Canvas />
+      <button onClick={() => clearCanvas()}>Clear</button>
+      <button onClick={() => sendToKitchen()}>Send to Kitchen</button>
       {orders.length > 0 ? (
         <div>
           {orders.map((order, index) => (
@@ -57,9 +63,7 @@ const FoH = () => {
               <button onClick={() => sendToKitchen(order.id)}>
                 Send to Kitchen
               </button>
-              <button onClick={() => clearCanvas()}>
-                Clear Canvas
-              </button>
+              <button onClick={() => clearCanvas()}>Clear Canvas</button>
             </div>
           ))}
         </div>
