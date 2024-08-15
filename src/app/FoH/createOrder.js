@@ -20,18 +20,7 @@ export async function sendToKitchen() {
   }
 
   const imageData = canvas.toDataURL("image/png");
-  axios
-    .post("/api/saveImage", { imageData })
-    .then((response) => {
-      console.log("Success:", response.data);
-      alert("Order sent to kitchen successfully!");
-    })
-    .catch((error) => {
-      console.error("Error:", error);
-      alert("Failed to send order to kitchen");
-    })
-    .finally(() => {
-    });
+  console.log(imageData);
 }
 
 
