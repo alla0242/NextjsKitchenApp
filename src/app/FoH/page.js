@@ -104,10 +104,11 @@ const FoH = () => {
           {orders.map((order, index) => (
             <div key={index}>
               <details>
-                Order ID: {order._id}
-                <p>State: {order.state}</p>
-              </details>
-              <summary>
+                <summary>
+                  Order ID: {order._id}
+                  <p>State: {order.state}</p>
+                </summary>
+
                 <button
                   onClick={() =>
                     handleUpdateOrderState(order._id, "Ready for Pickup")
@@ -127,7 +128,7 @@ const FoH = () => {
                 >
                   Mark as Completed
                 </button>
-              </summary>
+              </details>
             </div>
           ))}
         </ol>
