@@ -96,9 +96,9 @@ const FoH = () => {
           : "Waiting for first check..."}
       </h1>
       <h2>Front of House</h2>
-      <Canvas />
-      <button onClick={() => clearCanvas()}>Clear</button>
-      <button onClick={() => saveImage()}>Send to Kitchen</button>
+      <Canvas width={400} height={700} />
+      <button className="large-button bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-700" onClick={() => clearCanvas()}>Clear</button>
+      <button className="large-button bg-green-500 text-white py-2 px-4 rounded hover:bg-green-700" onClick={() => saveImage()}>Send to Kitchen</button>
       {orders.length > 0 ? (
         <ol className="list-decimal">
           {orders.map((order, index) => (
