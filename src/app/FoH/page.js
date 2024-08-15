@@ -100,32 +100,37 @@ const FoH = () => {
       <button onClick={() => clearCanvas()}>Clear</button>
       <button onClick={() => saveImage()}>Send to Kitchen</button>
       {orders.length > 0 ? (
-        <div>
+        <ol className="list-decimal">
           {orders.map((order, index) => (
             <div key={index}>
-              <p>State: {order.state}</p>
-              <button
-                onClick={() =>
-                  handleUpdateOrderState(order._id, "Ready for Pickup")
-                }
-              >
-                Ready for Pickup
-              </button>
-              <button
-                onClick={() =>
-                  handleUpdateOrderState(order._id, "Order at Table")
-                }
-              >
-                Order at Table
-              </button>
-              <button
-                onClick={() => handleCompleteOrder(order._id, "Completed")}
-              >
-                Mark as Completed
-              </button>
+              <details>
+                Order ID: {order._id}
+                <p>State: {order.state}</p>
+              </details>
+              <summary>
+                <button
+                  onClick={() =>
+                    handleUpdateOrderState(order._id, "Ready for Pickup")
+                  }
+                >
+                  Ready for Pickup
+                </button>
+                <button
+                  onClick={() =>
+                    handleUpdateOrderState(order._id, "Order at Table")
+                  }
+                >
+                  Order at Table
+                </button>
+                <button
+                  onClick={() => handleCompleteOrder(order._id, "Completed")}
+                >
+                  Mark as Completed
+                </button>
+              </summary>
             </div>
           ))}
-        </div>
+        </ol>
       ) : (
         <p>No orders available</p>
       )}
