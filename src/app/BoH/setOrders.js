@@ -7,6 +7,7 @@ async function updateOrderState(orderId, newState) {
   console.log(orderId, newState);
   try {
     await client.connect();
+    console.log("Connected to MongoDB");
     await client
       .db("DrawingApp")
       .collection("images")
