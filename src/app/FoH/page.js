@@ -142,7 +142,9 @@ const FoH = () => {
                   : order.state === "Ready for Pickup"
                   ? "flash-ready-for-pickup"
                   : ""
+                  
               }
+              className="p-3"
             >
               <details>
                 <summary>
