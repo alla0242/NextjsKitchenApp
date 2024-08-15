@@ -113,7 +113,7 @@ const FoH = () => {
       </h1>
       <details open={isNewOrderOpen} onToggle={() => setIsNewOrderOpen(!isNewOrderOpen)}>
         <summary className="text-2xl font-bold justify-center">{isNewOrderOpen ? "Hide Notepad" : "New Order"}</summary>
-        <Canvas width={370} height={700} />
+        <Canvas width={370} height={650} />
         <button
           className="large-button bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-700"
           onClick={() => clearCanvas()}
