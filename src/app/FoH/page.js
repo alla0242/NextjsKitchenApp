@@ -1,9 +1,11 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import Canvas from "../../Components/Canvas.js";
-import { sendToKitchen, clearCanvas } from "./createOrder.js";
+import sendToKitchen from "./createOrder.js";
 import getOrders from "../BoH/getOrders.js";
 import updateOrderState from "../BoH/setOrders.js";
+
+
 
 
 const FoH = () => {
@@ -21,6 +23,12 @@ const FoH = () => {
     fetchOrders();
   }, []);
 
+  function clearCanvas() {
+    const canvas = document.getElementById("canvas");
+    const ctx = canvas.getContext("2d");
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+  }
+
   async function fetchLatestImages() {
     try {
       const orders = await getOrders();
@@ -30,6 +38,8 @@ const FoH = () => {
       console.error("Error fetching latest images:", error);
     }
   }
+
+
 
   async function fetchOrders() {
     try {
@@ -60,10 +70,6 @@ const FoH = () => {
               <button onClick={() => updateOrderState(order.id, "Completed")}>
                 Mark as Completed
               </button>
-              <button onClick={() => sendToKitchen(order.id)}>
-                Send to Kitchen
-              </button>
-              <button onClick={() => clearCanvas()}>Clear Canvas</button>
             </div>
           ))}
         </div>
