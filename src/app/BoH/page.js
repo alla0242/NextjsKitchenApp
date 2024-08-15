@@ -64,7 +64,7 @@ const BoH = () => {
               <p>Last Change Source: {order.lastChangeSource}</p>
               <p>Last Change Time: {new Date(order.lastChangeTime).toLocaleString()}</p>
               <button
-                onClick={handleUpdateOrderState(order._id, "Ready for Pickup")}
+                onClick={() => handleUpdateOrderState(order._id, "Ready for Pickup")}
                 disabled={order.state === "Ready for Pickup"}
               >
                 Mark as Ready for Pickup
