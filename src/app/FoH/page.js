@@ -31,7 +31,9 @@ const FoH = () => {
     }
 
     const imageData = canvas.toDataURL("image/png");
-    console.log(imageData);
+    clearCanvas();
+    sendToKitchen(imageData);
+    return imageData;
   }
 
     async function handleUpdateOrderState(id, newState) {
