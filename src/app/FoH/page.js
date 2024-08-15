@@ -4,9 +4,7 @@ import Canvas from "../../Components/Canvas.js";
 import sendToKitchen from "./createOrder.js";
 import getOrders from "../BoH/getOrders.js";
 import updateOrderState from "../BoH/setOrders.js";
-
-
-
+import completeOrder from "./completeOrder.js";
 
 const FoH = () => {
   const [orders, setOrders] = useState([]);
@@ -36,14 +34,23 @@ const FoH = () => {
     return imageData;
   }
 
-    async function handleUpdateOrderState(id, newState) {
-      try {
-        await updateOrderState(id, newState);
-        await fetchLatestImages(); // Refresh orders after updating state
-      } catch (error) {
-        console.error("Error updating order state:", error);
-      }
+  async function handleUpdateOrderState(id, newState) {
+    try {
+      await updateOrderState(id, newState);
+      await fetchLatestImages(); // Refresh orders after updating state
+    } catch (error) {
+      console.error("Error updating order state:", error);
     }
+  }
+
+  async function handleCompleteOrder(id, newState) {
+    try {
+      await completeOrder(id, newState);
+      await fetchLatestImages(); // Refresh orders after completing order
+    } catch (error) {
+      console.error("Error completing order:", error);
+    }
+  }
 
   useEffect(() => {
     fetchLatestImages();
@@ -72,8 +79,6 @@ const FoH = () => {
     }
   }
 
-
-
   async function fetchOrders() {
     try {
       const orders = await getOrders();
@@ -99,7 +104,23 @@ const FoH = () => {
           {orders.map((order, index) => (
             <div key={index}>
               <p>State: {order.state}</p>
-              <button onClick={() => handleUpdateOrderState(order._id, "Completed")}>
+              <button
+                onClick={() =>
+                  handleUpdateOrderState(order._id, "Ready for Pickup")
+                }
+              >
+                Ready for Pickup
+              </button>
+              <button
+                onClick={() =>
+                  handleUpdateOrderState(order._id, "Order at Table")
+                }
+              >
+                Order at Table
+              </button>
+              <button
+                onClick={() => handleCompleteOrder(order._id, "Completed")}
+              >
                 Mark as Completed
               </button>
             </div>
