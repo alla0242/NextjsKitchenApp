@@ -53,28 +53,29 @@ const BoH = () => {
             >
               <img
                 src={order.imageData}
-                alt={`Order ${index + 1}`}
+                alt={`Order ${index + 1}, ID : ${order._id}`}
                 width={200}
                 height={200}
                 style={{ margin: "10px" }}
               />
-              <p>Order ID: {order._id}</p>
               <p>Sent at: {new Date(order.timestamp).toLocaleString()}</p>
               <p>Current State: {order.state}</p>
               <p>Last Change Source: {order.lastChangeSource}</p>
               <p>Last Change Time: {new Date(order.lastChangeTime).toLocaleString()}</p>
-              <button
-                onClick={() => handleUpdateOrderState(order._id, "Ready for Pickup") + console.log("Button clicked")}
-                disabled={order.state === "Ready for Pickup"}
-              >
-                Mark as Ready for Pickup
-              </button>
-              <button
-                onClick={() => handleUpdateOrderState(order._id, "Order at table")}
-                disabled={order.state === "Order at table"}
-              >
-                Mark as Order at Table
-              </button>
+              {order.state !== "Ready for Pickup" && (
+                <button
+                  onClick={() => handleUpdateOrderState(order._id, "Ready for Pickup")}
+                >
+                  Mark as Ready for Pickup
+                </button>
+              )}
+              {order.state !== "Order at table" && (
+                <button
+                  onClick={() => handleUpdateOrderState(order._id, "Order at table")}
+                >
+                  Mark as Order at Table
+                </button>
+              )}
             </div>
           ))}
         </div>
