@@ -1,7 +1,7 @@
 "use server"
 
 
-export function sendToKitchen() {
+export async function sendToKitchen() {
   setLoading(true);
   const canvas = document.getElementById("canvas");
   const ctx = canvas.getContext("2d");
@@ -37,7 +37,7 @@ export function sendToKitchen() {
     });
 }
 
-export function clearCanvas() {
+export async function clearCanvas() {
   const canvas = document.getElementById("canvas");
   const ctx = canvas.getContext("2d");
   ctx.clearRect(0, 0, canvas.width, canvas.height);

@@ -15,7 +15,7 @@ async function updateOrderState(orderId, newState) {
       .collection("images")
       .updateOne(
         { _id: new ObjectId(orderId) },
-        { $set: { state: newState, lastChangeTime: new Date(), lastChangeSource: "BoH" } }
+        { $set: { state: newState, lastChangeTime: new Date(), lastChangeSource: "FoH" } }
       );
       
     console.log("Order updated:", result);
