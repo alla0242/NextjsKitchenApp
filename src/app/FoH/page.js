@@ -12,6 +12,15 @@ const FoH = () => {
   const [orders, setOrders] = useState([]);
   const [lastCheckTime, setLastCheckTime] = useState(null);
 
+    async function handleUpdateOrderState(id, newState) {
+      try {
+        await updateOrderState(id, newState);
+        await fetchLatestImages(); // Refresh orders after updating state
+      } catch (error) {
+        console.error("Error updating order state:", error);
+      }
+    }
+
   useEffect(() => {
     fetchLatestImages();
     const intervalId = setInterval(fetchLatestImages, 5000); // Poll every 5 seconds
@@ -66,7 +75,7 @@ const FoH = () => {
           {orders.map((order, index) => (
             <div key={index}>
               <p>State: {order.state}</p>
-              <button onClick={() => updateOrderState(order.id, "Completed")}>
+              <button onClick={() => handleUpdateOrderState(order.id, "Completed")}>
                 Mark as Completed
               </button>
             </div>
