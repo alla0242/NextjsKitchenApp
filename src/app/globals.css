@@ -31,3 +31,43 @@ body {
     text-wrap: balance;
   }
 }
+
+@keyframes flashSentToKitchen {
+  0% { background-color: #ffeb3b; }
+  50% { background-color: #fff176; }
+  100% { background-color: #ffeb3b; }
+}
+
+@keyframes flashOrderAtTable {
+  0% { background-color: #4caf50; }
+  50% { background-color: #81c784; }
+  100% { background-color: #4caf50; }
+}
+
+@keyframes flashCompleted {
+  0% { background-color: #2196f3; }
+  50% { background-color: #64b5f6; }
+  100% { background-color: #2196f3; }
+}
+
+@keyframes flashReadyForPickup {
+  0% { background-color: #ff5722; }
+  50% { background-color: #ff8a65; }
+  100% { background-color: #ff5722; }
+}
+
+.flash-sent-to-kitchen {
+  animation: flashSentToKitchen 1s infinite;
+}
+
+.flash-order-at-table {
+  animation: flashOrderAtTable 1s infinite;
+}
+
+.flash-completed {
+  animation: flashCompleted 1s infinite;
+}
+
+.flash-ready-for-pickup {
+  animation: flashReadyForPickup 1s infinite;
+}
