@@ -58,6 +58,7 @@ const BoH = () => {
                 width={200}
                 height={200}
                 style={{ margin: "10px" }}
+                className="bg-white"
               />
               <p>Sent at: {new Date(order.timestamp).toLocaleString()}</p>
               <p>Current State: {order.state}</p>
