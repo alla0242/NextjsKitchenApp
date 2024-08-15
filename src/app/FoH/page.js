@@ -105,8 +105,8 @@ const FoH = () => {
             <div key={index}>
               <details>
                 <summary>
-                  Order ID: {order._id}
-                  <p>State: {order.state}</p>
+                  Order ID: {index+1}
+                  State: {order.state}
                 </summary>
 
                 <button
