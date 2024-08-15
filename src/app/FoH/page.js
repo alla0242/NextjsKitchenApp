@@ -97,43 +97,63 @@ const FoH = () => {
       </h1>
       <h2>Front of House</h2>
       <Canvas width={400} height={700} />
-      <button className="large-button bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-700" onClick={() => clearCanvas()}>Clear</button>
-      <button className="large-button bg-green-500 text-white py-2 px-4 rounded hover:bg-green-700" onClick={() => saveImage()}>Send to Kitchen</button>
+      <button
+        className="large-button bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-700"
+        onClick={() => clearCanvas()}
+      >
+        Clear
+      </button>
+      <button
+        className="large-button bg-green-500 text-white py-2 px-4 rounded hover:bg-green-700"
+        onClick={() => saveImage()}
+      >
+        Send to Kitchen
+      </button>
       {orders.length > 0 ? (
         <ol className="list-decimal">
           {orders.map((order, index) => (
-            <div key={index}>
+            <div
+              key={index}
+              className={
+                order.state === "Sent to Kitchen"
+                  ? "flash-sent-to-kitchen"
+                  : order.state === "Order at Table"
+                  ? "flash-order-at-table"
+                  : order.state === "Completed"
+                  ? "flash-completed"
+                  : order.state === "Ready for Pickup"
+                  ? "flash-ready-for-pickup"
+                  : ""
+              }
+            >
               <details>
                 <summary>
-                  Order ID: {index+1}
+                  Order #{index + 1}
                   State: {order.state}
                 </summary>
-
+                <img src={order.image} alt="Order Image" />
                 <button
-                  onClick={() =>
-                    handleUpdateOrderState(order._id, "Ready for Pickup")
-                  }
-                >
-                  Ready for Pickup
-                </button>
-                <button
+                  className="large-button bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-700"
                   onClick={() =>
                     handleUpdateOrderState(order._id, "Order at Table")
                   }
                 >
                   Order at Table
                 </button>
-                <button
-                  onClick={() => handleCompleteOrder(order._id, "Completed")}
-                >
-                  Mark as Completed
-                </button>
+                {order.state === "Order at Table" && (
+                  <button
+                    className="large-button bg-green-500 text-white py-2 px-4 rounded hover:bg-green-700"
+                    onClick={() => handleCompleteOrder(order._id, "Completed")}
+                  >
+                    Mark as Completed
+                  </button>
+                )}
               </details>
             </div>
           ))}
         </ol>
       ) : (
-        <p>No orders available</p>
+        <p>No orders up</p>
       )}
     </div>
   );
