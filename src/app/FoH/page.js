@@ -75,7 +75,7 @@ const FoH = () => {
           {orders.map((order, index) => (
             <div key={index}>
               <p>State: {order.state}</p>
-              <button onClick={() => handleUpdateOrderState(order.id, "Completed")}>
+              <button onClick={() => handleUpdateOrderState(order._id, "Completed")}>
                 Mark as Completed
               </button>
             </div>
