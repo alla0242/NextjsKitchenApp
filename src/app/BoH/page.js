@@ -58,6 +58,7 @@ const BoH = () => {
                 height={200}
                 style={{ margin: "10px" }}
               />
+              <p>Order ID: {order._id}</p>
               <p>Sent at: {new Date(order.timestamp).toLocaleString()}</p>
               <p>Current State: {order.state}</p>
               <p>Last Change Source: {order.lastChangeSource}</p>
