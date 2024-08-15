@@ -17,8 +17,9 @@ async function updateOrderState(orderId, newState) {
         { _id: orderId },
         { $set: { state: newState, lastChangeTime: new Date(), lastChangeSource: "BoH" } }
       );
-    
-    console.log("Order updated:", result);
+      
+      console.log("Order updated:", result);
+      return result;
   } catch (error) {
     console.error("Error updating order state:", error);
   } finally {
