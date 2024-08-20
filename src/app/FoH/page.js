@@ -1,6 +1,7 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import Canvas from "../../Components/Canvas.js";
+// import Canvas from "../../Components/Canvas.js";
+import WingButton from "../../Components/wingButton.js";
 import sendToKitchen from "./createOrder.js";
 import getOrders from "../BoH/getOrders.js";
 import updateOrderState from "../BoH/setOrders.js";
@@ -113,7 +114,8 @@ const FoH = () => {
       </h1>
       <details open={isNewOrderOpen} onToggle={() => setIsNewOrderOpen(!isNewOrderOpen)}>
         <summary className="text-2xl font-bold justify-center">{isNewOrderOpen ? "Hide Notepad" : "New Order"}</summary>
-        <Canvas width={370} height={650} />
+        {/* <Canvas width={370} height={650} /> */}
+        <WingButton />
         <button
           className="large-button bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-700"
           onClick={() => clearCanvas()}
