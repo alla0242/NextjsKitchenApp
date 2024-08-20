@@ -2,29 +2,29 @@
 import React, { useState } from "react";
 
 const table = [
-    {name: "Bar1"},
-    {name: "Bar2"},
-    {name: "Bar3"},
-    {name: "Bar4"},
-    {name: "Bar5"},
-    {name: "Bar6"},
-    {name: "Bar7"},
-    {name: "PonyBar1"},
-    {name: "PonyBar2"},
-    {name: "PonyBar3"},
-    {name: "PonyBar4"},
-    {name: "Vip1"},
-    {name: "Vip2"},
-    {name: "CornerHitop"},
-    {name: "FrontTable"},
-    {name: "Hitop1"},
-    {name: "Hitop2"},
-    {name: "Wall1"},
-    {name: "Wall2"},
-    {name: "Wall3"},
-    {name: "BackTable1"},
-    {name: "BackTable2"},
-    {name: "BackTable3"},
+    {name: "Bar1", seat1: [], seat2: [], seat3: [], seat4: [], seat5: [], seat6: [], seat7: [], seat8: [], seat9: [], seat10: []},
+    {name: "Bar2", seat1: [], seat2: [], seat3: [], seat4: [], seat5: [], seat6: [], seat7: [], seat8: [], seat9: [], seat10: []},
+    {name: "Bar3", seat1: [], seat2: [], seat3: [], seat4: [], seat5: [], seat6: [], seat7: [], seat8: [], seat9: [], seat10: []},
+    {name: "Bar4", seat1: [], seat2: [], seat3: [], seat4: [], seat5: [], seat6: [], seat7: [], seat8: [], seat9: [], seat10: []},
+    {name: "Bar5", seat1: [], seat2: [], seat3: [], seat4: [], seat5: [], seat6: [], seat7: [], seat8: [], seat9: [], seat10: []},
+    {name: "Bar6", seat1: [], seat2: [], seat3: [], seat4: [], seat5: [], seat6: [], seat7: [], seat8: [], seat9: [], seat10: []},
+    {name: "Bar7", seat1: [], seat2: [], seat3: [], seat4: [], seat5: [], seat6: [], seat7: [], seat8: [], seat9: [], seat10: []},
+    {name: "PonyBar1", seat1: [], seat2: [], seat3: [], seat4: [], seat5: [], seat6: [], seat7: [], seat8: [], seat9: [], seat10: []},
+    {name: "PonyBar2", seat1: [], seat2: [], seat3: [], seat4: [], seat5: [], seat6: [], seat7: [], seat8: [], seat9: [], seat10: []},
+    {name: "PonyBar3", seat1: [], seat2: [], seat3: [], seat4: [], seat5: [], seat6: [], seat7: [], seat8: [], seat9: [], seat10: []},
+    {name: "PonyBar4", seat1: [], seat2: [], seat3: [], seat4: [], seat5: [], seat6: [], seat7: [], seat8: [], seat9: [], seat10: []},
+    {name: "Vip1", seat1: [], seat2: [], seat3: [], seat4: [], seat5: [], seat6: [], seat7: [], seat8: [], seat9: [], seat10: []},
+    {name: "Vip2", seat1: [], seat2: [], seat3: [], seat4: [], seat5: [], seat6: [], seat7: [], seat8: [], seat9: [], seat10: []},
+    {name: "CornerHitop", seat1: [], seat2: [], seat3: [], seat4: [], seat5: [], seat6: [], seat7: [], seat8: [], seat9: [], seat10: []},
+    {name: "FrontTable", seat1: [], seat2: [], seat3: [], seat4: [], seat5: [], seat6: [], seat7: [], seat8: [], seat9: [], seat10: []},
+    {name: "Hitop1", seat1: [], seat2: [], seat3: [], seat4: [], seat5: [], seat6: [], seat7: [], seat8: [], seat9: [], seat10: []},
+    {name: "Hitop2", seat1: [], seat2: [], seat3: [], seat4: [], seat5: [], seat6: [], seat7: [], seat8: [], seat9: [], seat10: []},
+    {name: "Wall1", seat1: [], seat2: [], seat3: [], seat4: [], seat5: [], seat6: [], seat7: [], seat8: [], seat9: [], seat10: []},
+    {name: "Wall2", seat1: [], seat2: [], seat3: [], seat4: [], seat5: [], seat6: [], seat7: [], seat8: [], seat9: [], seat10: []},
+    {name: "Wall3", seat1: [], seat2: [], seat3: [], seat4: [], seat5: [], seat6: [], seat7: [], seat8: [], seat9: [], seat10: []},
+    {name: "BackTable1", seat1: [], seat2: [], seat3: [], seat4: [], seat5: [], seat6: [], seat7: [], seat8: [], seat9: [], seat10: []},
+    {name: "BackTable2", seat1: [], seat2: [], seat3: [], seat4: [], seat5: [], seat6: [], seat7: [], seat8: [], seat9: [], seat10: []},
+    {name: "BackTable3", seat1: [], seat2: [], seat3: [], seat4: [], seat5: [], seat6: [], seat7: [], seat8: [], seat9: [], seat10: []  },
 ];
 
 const sauce = [
@@ -73,6 +73,8 @@ const WingButton = () => {
     const [totalWings, setTotalWings] = useState(0);
     const [inputValue, setInputValue] = useState("");
     const [selectedSides, setSelectedSides] = useState([]);
+    const [selectedSpecialInstructions, setSelectedSpecialInstructions] = useState([]);
+    const [selectedSauces, setSelectedSauces] = useState([]);
 
     const addWings = (amount) => {
         setTotalWings(totalWings + amount);
@@ -89,13 +91,19 @@ const WingButton = () => {
         setSelectedTable(updatedTable);
     };
 
+    const handleAddCustomInstruction = () => {
+        if (inputValue.trim() !== "") {
+            setSelectedSpecialInstructions(prev => [...prev, inputValue.trim()]);
+            setInputValue("");
+        }
+    };
+
     const toggleSide = (side) => {
         setSelectedSides(prevSelectedSides => {
-            const existingSide = prevSelectedSides.find(s => s.name === side.name);
-            if (existingSide) {
+            if (prevSelectedSides.some(s => s.name === side.name)) {
                 return prevSelectedSides.map(s => 
-                    s.name === side.name ? { ...s, quantity: s.quantity + 1 } : s
-                );
+                    s.name === side.name ? { ...s, quantity: 0 } : s
+                ).filter(s => s.quantity > 0);
             } else {
                 return [...prevSelectedSides, { ...side, quantity: 1 }];
             }
@@ -116,6 +124,26 @@ const WingButton = () => {
                 .map(s => s.name === sideName && s.quantity > 0 ? { ...s, quantity: s.quantity - 1 } : s)
                 .filter(s => s.quantity > 0)
         );
+    };
+
+    const toggleSpecialInstruction = (instruction) => {
+        setSelectedSpecialInstructions(prevSelectedSpecialInstructions => {
+            if (prevSelectedSpecialInstructions.includes(instruction)) {
+                return prevSelectedSpecialInstructions.filter(i => i !== instruction);
+            } else {
+                return [...prevSelectedSpecialInstructions, instruction];
+            }
+        });
+    };
+
+    const toggleSauce = (sauce) => {
+        setSelectedSauces(prevSelectedSauces => {
+            if (prevSelectedSauces.includes(sauce)) {
+                return prevSelectedSauces.filter(s => s !== sauce);
+            } else {
+                return [...prevSelectedSauces, sauce];
+            }
+        });
     };
 
     return (
@@ -144,22 +172,36 @@ const WingButton = () => {
           </div>
           <button>Next Screen</button>
         </div>
-        <div id="Order">
-          <h1>Order</h1>
-          {/* {order} */}
-        </div>
+
 
         <div id="quantity">
           <button onClick={() => addWings(4)}>Half pound</button>
           <button onClick={() => addWings(8)}>Full pound</button>
           <h2>You're sending {totalWings} wings to the kitchen</h2>
+          <button>Next Screen</button>
         </div>
 
         <div id="sauce">
           <h1>Select Sauce</h1>
           {sauce.map((sauce) => (
-            <button key={sauce.name}>{sauce.name}</button>
+            <button
+              key={sauce.name}
+              onClick={() => toggleSauce(sauce.name)}
+              className={`py-2 px-4 rounded ${
+                selectedSauces.includes(sauce.name)
+                  ? "bg-green-500 text-white"
+                  : "bg-gray-200 text-black"
+              }`}
+            >
+              {sauce.name}
+            </button>
           ))}
+          <h2>
+            You're adding{" "}
+            {selectedSauces.join(", ")}{" "}
+            sauces to these {totalWings} wings
+          </h2>
+          <button>Next Screen</button>
         </div>
         <div id="side">
           <h1>Any Sides?</h1>
@@ -193,12 +235,21 @@ const WingButton = () => {
               .join(", ")}{" "}
             sides to the kitchen
           </h2>
+          <button>Next Screen</button>
         </div>
         <div id="Speical">
           <h1>Special Instructions</h1>
-          {specialInstructions.map((specialInstructions) => (
-            <button key={specialInstructions.name}>
-              {specialInstructions.name}
+          {specialInstructions.map((instruction) => (
+            <button
+              key={instruction.name}
+              onClick={() => toggleSpecialInstruction(instruction.name)}
+              className={`py-2 px-4 rounded ${
+                selectedSpecialInstructions.includes(instruction.name)
+                  ? "bg-green-500 text-white"
+                  : "bg-gray-200 text-black"
+              }`}
+            >
+              {instruction.name}
             </button>
           ))}
           <label>Custom Special Instructions</label>
@@ -209,11 +260,17 @@ const WingButton = () => {
             value={inputValue}
             onChange={handleInputChange}
           ></input>
-          <button onClick={() => handleSetName(specialInstructions)}>
-            Set Special Instructions
+          <button onClick={handleAddCustomInstruction}>
+            Add Custom Instruction
           </button>
+          <h2>
+            Special Instructions:
+            {selectedSpecialInstructions.join(", ")}
+          </h2>
+          <button>Next Screen</button>
         </div>
         <div id="SendToKitchen">
+          
           <button>Next Seat</button>
           <button>Send To Kitchen</button>
         </div>
