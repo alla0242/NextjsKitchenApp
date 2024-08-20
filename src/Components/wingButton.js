@@ -44,23 +44,24 @@ const sauce = [
 ];
 
 const side = [
-  { name: "Sour Cream" },
-  { name: "Ranch" },
-  { name: "Blue Cheese" },
-  { name: "Mild" },
-  { name: "Medium" },
-  { name: "Hot" },
-  { name: "Suicide" },
-  { name: "Honey Garlic" },
-  { name: "Honey Hot" },
-  { name: "Sweet Thai" },
-  { name: "Jerk" },
+  { name: "Sour Cream", quantity: 0 },
+  { name: "Ranch", quantity: 0 },
+  { name: "Blue Cheese", quantity: 0 },
+  { name: "Mild", quantity: 0 },
+  { name: "Medium", quantity: 0 },
+  { name: "Hot", quantity: 0 },
+  { name: "Suicide", quantity: 0 },
+  { name: "Honey Garlic", quantity: 0 },
+  { name: "Honey Hot", quantity: 0 },
+  { name: "Sweet Thai", quantity: 0 },
+  { name: "Jerk", quantity: 0 },
 ];
 
 const specialInstructions = [
     {name: "Well Done"},
     {name: "Light Sauce"},
     {name: "Heavy Sauce"},
+    {name: "Unbreaded"},
 ];
 
 const order = [
@@ -90,12 +91,31 @@ const WingButton = () => {
 
     const toggleSide = (side) => {
         setSelectedSides(prevSelectedSides => {
-            if (prevSelectedSides.some(s => s.name === side.name)) {
-                return prevSelectedSides.filter(s => s.name !== side.name);
+            const existingSide = prevSelectedSides.find(s => s.name === side.name);
+            if (existingSide) {
+                return prevSelectedSides.map(s => 
+                    s.name === side.name ? { ...s, quantity: s.quantity + 1 } : s
+                );
             } else {
-                return [...prevSelectedSides, side];
+                return [...prevSelectedSides, { ...side, quantity: 1 }];
             }
         });
+    };
+
+    const incrementSide = (sideName) => {
+        setSelectedSides(prevSelectedSides => 
+            prevSelectedSides.map(s => 
+                s.name === sideName ? { ...s, quantity: s.quantity + 1 } : s
+            )
+        );
+    };
+
+    const decrementSide = (sideName) => {
+        setSelectedSides(prevSelectedSides => 
+            prevSelectedSides
+                .map(s => s.name === sideName && s.quantity > 0 ? { ...s, quantity: s.quantity - 1 } : s)
+                .filter(s => s.quantity > 0)
+        );
     };
 
     return (
@@ -122,6 +142,7 @@ const WingButton = () => {
             ></input>
             <button onClick={() => handleSetName(table)}>Set Name</button>
           </div>
+          <button>Next Screen</button>
         </div>
         <div id="Order">
           <h1>Order</h1>
@@ -143,15 +164,35 @@ const WingButton = () => {
         <div id="side">
           <h1>Any Sides?</h1>
           {side.map((side) => (
-            <button
-              key={side.name}
-              onClick={() => toggleSide(side)}
-              className={`py-2 px-4 rounded ${selectedSides.some(s => s.name === side.name) ? 'bg-green-500 text-white' : 'bg-gray-200 text-black'}`}
-            >
-              {side.name}
-            </button>
+            <div key={side.name}>
+              <button
+                onClick={() => toggleSide(side)}
+                className={`py-2 px-4 rounded ${
+                  selectedSides.some((s) => s.name === side.name)
+                    ? "bg-green-500 text-white"
+                    : "bg-gray-200 text-black"
+                }`}
+              >
+                {side.name}
+              </button>
+              {selectedSides.some((s) => s.name === side.name) && (
+                <div>
+                  <button onClick={() => decrementSide(side.name)}>-</button>
+                  <span>
+                    {selectedSides.find((s) => s.name === side.name).quantity}
+                  </span>
+                  <button onClick={() => incrementSide(side.name)}>+</button>
+                </div>
+              )}
+            </div>
           ))}
-          <h2>You're adding {selectedSides.map(side => side.name).join(', ')} sides to the kitchen</h2>
+          <h2>
+            You're adding{" "}
+            {selectedSides
+              .map((side) => `${side.quantity}x ${side.name} `)
+              .join(", ")}{" "}
+            sides to the kitchen
+          </h2>
         </div>
         <div id="Speical">
           <h1>Special Instructions</h1>
@@ -164,11 +205,13 @@ const WingButton = () => {
           <input
             type="text"
             id="instructions"
-            name="name"
+            name="instructions"
             value={inputValue}
             onChange={handleInputChange}
           ></input>
-          <button onClick={() => handleSetName(table)}>Set Special Instructions</button>
+          <button onClick={() => handleSetName(specialInstructions)}>
+            Set Special Instructions
+          </button>
         </div>
         <div id="SendToKitchen">
           <button>Next Seat</button>
