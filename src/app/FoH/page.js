@@ -5,7 +5,7 @@ import sendToKitchen from "./createOrder.js";
 import getOrders from "../BoH/getOrders.js";
 import updateOrderState from "../BoH/setOrders.js";
 import completeOrder from "./completeOrder.js";
-import CameraComponent from '../../Components/CameraComponent';
+import CameraComponent from '../../Components/camera.js';
 
 const FoH = () => {
   const [orders, setOrders] = useState([]);
