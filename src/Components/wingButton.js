@@ -193,6 +193,7 @@ const WingButton = () => {
       specialInstructions: selectedSpecialInstructions
     };
     setWingDetails(prev => [...prev, newWingDetail]);
+    console.log("Wing order added:", newWingDetail);
     setTotalWings(0);
     setSelectedSauces([]);
     setSelectedSides([]);
@@ -200,8 +201,14 @@ const WingButton = () => {
   };
 
   const handleSaveWings = () => {
-    // Save the wingDetails array to the desired location
-    console.log("Wing details saved:", wingDetails);
+    const newWingDetail = {
+      totalWings,
+      sauces: selectedSauces,
+      sides: selectedSides,
+      specialInstructions: selectedSpecialInstructions
+    };
+    setWingDetails(prev => [...prev, newWingDetail]);
+    console.log("Wing order saved:", [...wingDetails, newWingDetail]);
   };
 
   return (
@@ -372,22 +379,27 @@ const WingButton = () => {
 
       <div id="seatSummary" className="space-y-4">
         <h2 className="text-xl">Seat {currentSeat} Summary</h2>
-        <p>
-          <strong>Total Wings:</strong> {totalWings}
-        </p>
-        <p>
-          <strong>Sauces:</strong> {selectedSauces.join(", ")}
-        </p>
-        <p>
-          <strong>Sides:</strong>{" "}
-          {selectedSides
-            .map((side) => `${side.quantity}x ${side.name}`)
-            .join(", ")}
-        </p>
-        <p>
-          <strong>Special Instructions:</strong>{" "}
-          {selectedSpecialInstructions.join(", ")}
-        </p>
+        {wingDetails.map((detail, index) => (
+          <div key={index} className="space-y-2">
+            <p>
+              <strong>Order {index + 1}:</strong>
+            </p>
+            <p>
+              <strong>Total Wings:</strong> {detail.totalWings}
+            </p>
+            <p>
+              <strong>Sauces:</strong> {detail.sauces.join(", ")}
+            </p>
+            <p>
+              <strong>Sides:</strong>{" "}
+              {detail.sides.map((side) => `${side.quantity}x ${side.name}`).join(", ")}
+            </p>
+            <p>
+              <strong>Special Instructions:</strong>{" "}
+              {detail.specialInstructions.join(", ")}
+            </p>
+          </div>
+        ))}
         <button
           onClick={handleNextSeat}
           className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-700"
