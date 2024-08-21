@@ -1,5 +1,5 @@
 import React, { useRef } from 'react';
-import ReactCamera from 'react-camera-pro';
+import { Camera } from 'react-camera-pro';
 
 const CameraComponent = () => {
   const cameraRef = useRef(null);
@@ -14,7 +14,7 @@ const CameraComponent = () => {
 
   return (
     <div>
-      <ReactCamera ref={cameraRef} aspectRatio={16 / 9} />
+      <Camera ref={cameraRef} aspectRatio={16 / 9} />
       <button onClick={takePhoto}>Take Photo</button>
     </div>
   );
