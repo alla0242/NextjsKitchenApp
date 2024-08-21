@@ -14,7 +14,7 @@ const CameraComponent = () => {
 
   return (
     <div>
-      <Camera ref={cameraRef} aspectRatio={16 / 9} />
+      <Camera ref={cameraRef} aspectRatio={9 / 16} facingMode="environment" />
       <button onClick={takePhoto}>Take Photo</button>
     </div>
   );
