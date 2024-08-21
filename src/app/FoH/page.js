@@ -5,6 +5,7 @@ import sendToKitchen from "./createOrder.js";
 import getOrders from "../BoH/getOrders.js";
 import updateOrderState from "../BoH/setOrders.js";
 import completeOrder from "./completeOrder.js";
+import CameraComponent from '../../Components/CameraComponent';
 
 const FoH = () => {
   const [orders, setOrders] = useState([]);
@@ -127,6 +128,7 @@ const FoH = () => {
           Send to Kitchen
         </button>
       </details>
+      <CameraComponent />
       {orders.length > 0 ? (
         <ol className="list-decimal">
           {orders.map((order, index) => (
