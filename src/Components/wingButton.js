@@ -228,69 +228,101 @@ const WingButton = () => {
               onChange={handleInputChange}
               className="border rounded p-2 w-full"
             />
-            <button onClick={handleSetName} className="bg-green-500 text-white py-2 px-4 rounded hover:bg-green-700">Set Name</button>
+            <button
+              onClick={handleSetName}
+              className="bg-green-500 text-white py-2 px-4 rounded hover:bg-green-700"
+            >
+              Set Name
+            </button>
           </div>
-          <button className="bg-yellow-500 text-white py-2 px-4 rounded hover:bg-yellow-700">Next Screen</button>
+          <button className="bg-yellow-500 text-white py-2 px-4 rounded hover:bg-yellow-700">
+            Next Screen
+          </button>
         </div>
       )}
 
       <div id="quantity" className="space-y-4">
-        <button onClick={() => addWings(4)} className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-700">Half pound</button>
-        <button onClick={() => addWings(8)} className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-700">Full pound</button>
-        <h2 className="text-lg">You're sending {totalWings} wings to the kitchen</h2>
-        <button className="bg-yellow-500 text-white py-2 px-4 rounded hover:bg-yellow-700">Next Screen</button>
-      </div>
+        <button
+          onClick={() => addWings(4)}
+          className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-700"
+        >
+          Half pound
+        </button>
+        <button
+          onClick={() => addWings(8)}
+          className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-700"
+        >
+          Full pound
+        </button>
+        <h2 className="text-lg">
+          You're sending {totalWings} wings to the kitchen
+        </h2>
 
-      <div id="sauce" className="space-y-4">
         <h1 className="text-xl">Select Sauce</h1>
         <div className="space-y-2">
           {sauce.map((sauce) => (
             <button
               key={sauce.name}
               onClick={() => toggleSauce(sauce.name)}
-              className={`py-2 px-4 rounded ${selectedSauces.includes(sauce.name) ? "bg-green-500 text-white" : "bg-gray-200 text-black"}`}
+              className={`py-2 px-4 rounded ${
+                selectedSauces.includes(sauce.name)
+                  ? "bg-green-500 text-white"
+                  : "bg-gray-200 text-black"
+              }`}
             >
               {sauce.name}
             </button>
           ))}
         </div>
-        <h2 className="text-lg">You're adding {selectedSauces.join(", ")} sauces to these {totalWings} wings</h2>
-        <button className="bg-yellow-500 text-white py-2 px-4 rounded hover:bg-yellow-700">Next Screen</button>
-      </div>
 
-      <div id="side" className="space-y-4">
         <h1 className="text-xl">Any Sides?</h1>
         <div className="space-y-2">
           {side.map((side) => (
             <div key={side.name} className="space-y-2">
               <button
                 onClick={() => toggleSide(side)}
-                className={`py-2 px-4 rounded ${selectedSides.some((s) => s.name === side.name) ? "bg-green-500 text-white" : "bg-gray-200 text-black"}`}
+                className={`py-2 px-4 rounded ${
+                  selectedSides.some((s) => s.name === side.name)
+                    ? "bg-green-500 text-white"
+                    : "bg-gray-200 text-black"
+                }`}
               >
                 {side.name}
               </button>
               {selectedSides.some((s) => s.name === side.name) && (
                 <div className="flex items-center space-x-2">
-                  <button onClick={() => decrementSide(side.name)} className="bg-red-500 text-white py-1 px-2 rounded hover:bg-red-700">-</button>
-                  <span>{selectedSides.find((s) => s.name === side.name).quantity}</span>
-                  <button onClick={() => incrementSide(side.name)} className="bg-green-500 text-white py-1 px-2 rounded hover:bg-green-700">+</button>
+                  <button
+                    onClick={() => decrementSide(side.name)}
+                    className="bg-red-500 text-white py-1 px-2 rounded hover:bg-red-700"
+                  >
+                    -
+                  </button>
+                  <span>
+                    {selectedSides.find((s) => s.name === side.name).quantity}
+                  </span>
+                  <button
+                    onClick={() => incrementSide(side.name)}
+                    className="bg-green-500 text-white py-1 px-2 rounded hover:bg-green-700"
+                  >
+                    +
+                  </button>
                 </div>
               )}
             </div>
           ))}
         </div>
-        <h2 className="text-lg">You're adding {selectedSides.map((side) => `${side.quantity}x ${side.name}`).join(", ")} sides to the kitchen</h2>
-        <button className="bg-yellow-500 text-white py-2 px-4 rounded hover:bg-yellow-700">Next Screen</button>
-      </div>
 
-      <div id="special" className="space-y-4">
         <h1 className="text-xl">Special Instructions</h1>
         <div className="space-y-2">
           {specialInstructions.map((instruction) => (
             <button
               key={instruction.name}
               onClick={() => toggleSpecialInstruction(instruction.name)}
-              className={`py-2 px-4 rounded ${selectedSpecialInstructions.includes(instruction.name) ? "bg-green-500 text-white" : "bg-gray-200 text-black"}`}
+              className={`py-2 px-4 rounded ${
+                selectedSpecialInstructions.includes(instruction.name)
+                  ? "bg-green-500 text-white"
+                  : "bg-gray-200 text-black"
+              }`}
             >
               {instruction.name}
             </button>
@@ -306,49 +338,119 @@ const WingButton = () => {
             onChange={handleInputChange}
             className="border rounded p-2 w-full"
           />
-          <button onClick={handleAddCustomInstruction} className="bg-green-500 text-white py-2 px-4 rounded hover:bg-green-700">Add Custom Instruction</button>
+          <button
+            onClick={handleAddCustomInstruction}
+            className="bg-green-500 text-white py-2 px-4 rounded hover:bg-green-700"
+          >
+            Add Custom Instruction
+          </button>
         </div>
-        <h2 className="text-lg">Special Instructions: {selectedSpecialInstructions.join(", ")}</h2>
-        <button onClick={handleMoreWings} className="bg-yellow-500 text-white py-2 px-4 rounded hover:bg-yellow-700">More Wings</button>
-        <button onClick={handleSaveWings} className="bg-yellow-500 text-white py-2 px-4 rounded hover:bg-yellow-700" id="saveWings">Save Wings</button>
+
+        <h2 className="text-lg">
+          {totalWings} {selectedSpecialInstructions.join(", ")} wings with{" "}
+          {selectedSauces.join(", ")} and{" "}
+          {selectedSides
+            .map((side) => `${side.quantity}x ${side.name}`)
+            .join(", ")}{" "}
+          sides
+        </h2>
+
+        <button
+          onClick={handleMoreWings}
+          className="bg-yellow-500 text-white py-2 px-4 rounded hover:bg-yellow-700"
+        >
+          More Wings
+        </button>
+        <button
+          onClick={handleSaveWings}
+          className="bg-yellow-500 text-white py-2 px-4 rounded hover:bg-yellow-700"
+          id="saveWings"
+        >
+          Save Wings
+        </button>
       </div>
 
       <div id="seatSummary" className="space-y-4">
         <h2 className="text-xl">Seat {currentSeat} Summary</h2>
-        <p><strong>Total Wings:</strong> {totalWings}</p>
-        <p><strong>Sauces:</strong> {selectedSauces.join(", ")}</p>
-        <p><strong>Sides:</strong> {selectedSides.map((side) => `${side.quantity}x ${side.name}`).join(", ")}</p>
-        <p><strong>Special Instructions:</strong> {selectedSpecialInstructions.join(", ")}</p>
-        <button onClick={handleNextSeat} className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-700">Next Seat</button>
+        <p>
+          <strong>Total Wings:</strong> {totalWings}
+        </p>
+        <p>
+          <strong>Sauces:</strong> {selectedSauces.join(", ")}
+        </p>
+        <p>
+          <strong>Sides:</strong>{" "}
+          {selectedSides
+            .map((side) => `${side.quantity}x ${side.name}`)
+            .join(", ")}
+        </p>
+        <p>
+          <strong>Special Instructions:</strong>{" "}
+          {selectedSpecialInstructions.join(", ")}
+        </p>
+        <button
+          onClick={handleNextSeat}
+          className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-700"
+        >
+          Next Seat
+        </button>
       </div>
 
       <div id="tableSummary" className="space-y-4">
         <h2 className="text-xl">Table Summary</h2>
-        <p><strong>Total Wings:</strong> {tableSummary.totalWings}</p>
-        <p><strong>Sauces:</strong> {tableSummary.sauces.join(", ")}</p>
-        <p><strong>Sides:</strong> {tableSummary.sides.join(", ")}</p>
-        <p><strong>Special Instructions:</strong> {tableSummary.specialInstructions.join(", ")}</p>
+        <p>
+          <strong>Total Wings:</strong> {tableSummary.totalWings}
+        </p>
+        <p>
+          <strong>Sauces:</strong> {tableSummary.sauces.join(", ")}
+        </p>
+        <p>
+          <strong>Sides:</strong> {tableSummary.sides.join(", ")}
+        </p>
+        <p>
+          <strong>Special Instructions:</strong>{" "}
+          {tableSummary.specialInstructions.join(", ")}
+        </p>
         <h3 className="text-lg">Seat Details:</h3>
         {Object.entries(seatSummaries).map(([seat, summary], index) => (
           <div
             key={index}
-            className={`space-y-2 ${index % 2 === 0 ? "bg-gray-100" : "bg-gray-200"} p-2 rounded`}
+            className={`space-y-2 ${
+              index % 2 === 0 ? "bg-gray-100" : "bg-gray-200"
+            } p-2 rounded`}
           >
             <h4 className="text-lg">{seat}</h4>
-            <p><strong>Total Wings:</strong> {summary.totalWings}</p>
-            <p><strong>Sauces:</strong> {summary.sauces.join(", ")}</p>
-            <p><strong>Sides:</strong> {summary.sides.join(", ")}</p>
-            <p><strong>Special Instructions:</strong> {summary.specialInstructions.join(", ")}</p>
-            <button className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-700">Edit Seat</button>
+            <p>
+              <strong>Total Wings:</strong> {summary.totalWings}
+            </p>
+            <p>
+              <strong>Sauces:</strong> {summary.sauces.join(", ")}
+            </p>
+            <p>
+              <strong>Sides:</strong> {summary.sides.join(", ")}
+            </p>
+            <p>
+              <strong>Special Instructions:</strong>{" "}
+              {summary.specialInstructions.join(", ")}
+            </p>
+            <button className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-700">
+              Edit Seat
+            </button>
           </div>
         ))}
-        <button className="bg-yellow-500 text-white py-2 px-4 rounded hover:bg-yellow-700">Edit Order</button>
-        <button className="bg-green-500 text-white py-2 px-4 rounded hover:bg-green-700">Confirm Order</button>
+        <button className="bg-yellow-500 text-white py-2 px-4 rounded hover:bg-yellow-700">
+          Edit Order
+        </button>
+        <button className="bg-green-500 text-white py-2 px-4 rounded hover:bg-green-700">
+          Confirm Order
+        </button>
       </div>
 
       <div id="sendToKitchen" className="space-y-4">
         <h2 className="text-xl">Confirm Order</h2>
-        <button className="bg-red-500 text-white py-2 px-4 rounded hover:bg-red-700">Send To Kitchen</button>
+        <button className="bg-red-500 text-white py-2 px-4 rounded hover:bg-red-700">
+          Send To Kitchen
+        </button>
       </div>
     </div>
   );
