@@ -82,20 +82,6 @@ const WingButton = () => {
   const [wingDetails, setWingDetails] = useState([]);
 
   useEffect(() => {
-    const newSeatSummary = {
-      totalWings,
-      sauces: selectedSauces,
-      sides: selectedSides.map(side => `${side.quantity}x ${side.name}`),
-      specialInstructions: selectedSpecialInstructions
-    };
-
-    setSeatSummaries(prev => ({
-      ...prev,
-      [`seat${currentSeat}`]: [...(prev[`seat${currentSeat}`] || []), newSeatSummary]
-    }));
-  }, [totalWings, selectedSauces, selectedSides, selectedSpecialInstructions, currentSeat]);
-
-  useEffect(() => {
     const aggregatedSummary = Object.values(seatSummaries).flat().reduce(
       (acc, seat) => {
         acc.totalWings += seat.totalWings;
@@ -186,6 +172,18 @@ const WingButton = () => {
     };
     setWingDetails([newWingDetail]); // Reset wingDetails to start orders from 1
 
+    const newSeatSummary = {
+      totalWings,
+      sauces: selectedSauces,
+      sides: selectedSides.map(side => `${side.quantity}x ${side.name}`),
+      specialInstructions: selectedSpecialInstructions
+    };
+
+    setSeatSummaries(prev => ({
+      ...prev,
+      [`seat${currentSeat}`]: [...(prev[`seat${currentSeat}`] || []), newSeatSummary]
+    }));
+
     setCurrentSeat(prevSeat => (prevSeat < 10 ? prevSeat + 1 : 1));
     setTotalWings(0);
     setSelectedSauces([]);
@@ -200,7 +198,7 @@ const WingButton = () => {
       sides: selectedSides,
       specialInstructions: selectedSpecialInstructions
     };
-    setWingDetails(prev => [...prev, newWingDetail]);
+    setWingDetails(prev => [...prev, newWingDetail]); // Add new order at the start
     console.log("Wing order added:", newWingDetail);
     setTotalWings(0);
     setSelectedSauces([]);
@@ -209,18 +207,42 @@ const WingButton = () => {
   };
 
   const handleSaveWings = () => {
-    const newWingDetail = {
-      totalWings,
-      sauces: selectedSauces,
-      sides: selectedSides,
-      specialInstructions: selectedSpecialInstructions
+    console.log("handleSaveWings called");
+    console.log("Current wingDetails:", wingDetails);
+
+    const aggregatedWingDetail = wingDetails.reduce(
+      (acc, detail) => {
+        acc.totalWings += detail.totalWings;
+        acc.sauces = [...acc.sauces, ...detail.sauces];
+        acc.sides = [...acc.sides, ...detail.sides];
+        acc.specialInstructions = [...acc.specialInstructions, ...detail.specialInstructions];
+        return acc;
+      },
+      { totalWings: 0, sauces: [], sides: [], specialInstructions: [] }
+    );
+
+    console.log("Aggregated wing detail:", aggregatedWingDetail);
+
+    setWingDetails([aggregatedWingDetail]); // Save only one aggregated order
+    console.log("Wing details after setting:", [aggregatedWingDetail]);
+
+    const newSeatSummary = {
+      totalWings: aggregatedWingDetail.totalWings,
+      sauces: aggregatedWingDetail.sauces,
+      sides: aggregatedWingDetail.sides.map(side => `${side.quantity}x ${side.name}`),
+      specialInstructions: aggregatedWingDetail.specialInstructions
     };
-    setWingDetails(prev => [...prev, newWingDetail]);
-    console.log("Wing order saved:", [...wingDetails, newWingDetail]);
+
+    setSeatSummaries(prev => ({
+      ...prev,
+      [`seat${currentSeat}`]: [...(prev[`seat${currentSeat}`] || []), newSeatSummary]
+    }));
+
     setTotalWings(0);
     setSelectedSauces([]);
     setSelectedSides([]);
     setSelectedSpecialInstructions([]);
+    console.log("State reset after saving wings");
   };
 
   return (

@@ -54,16 +54,16 @@ const FoH = () => {
     }
   }
 
-  useEffect(() => {
-    fetchLatestImages();
-    const intervalId = setInterval(fetchLatestImages, 5000); // Poll every 5 seconds
+  // useEffect(() => {
+  //   fetchLatestImages();
+  //   const intervalId = setInterval(fetchLatestImages, 5000); // Poll every 5 seconds
 
-    return () => clearInterval(intervalId); // Cleanup on component unmount
-  }, []);
+  //   return () => clearInterval(intervalId); // Cleanup on component unmount
+  // }, []);
 
-  useEffect(() => {
-    fetchOrders();
-  }, []);
+  // useEffect(() => {
+  //   fetchOrders();
+  // }, []);
 
   function clearCanvas() {
     const canvas = document.getElementById("canvas");
@@ -71,24 +71,24 @@ const FoH = () => {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
   }
 
-  async function fetchLatestImages() {
-    try {
-      const orders = await getOrders();
-      setOrders(orders);
-      setLastCheckTime(new Date());
-    } catch (error) {
-      console.error("Error fetching latest images:", error);
-    }
-  }
+  // async function fetchLatestImages() {
+  //   try {
+  //     const orders = await getOrders();
+  //     setOrders(orders);
+  //     setLastCheckTime(new Date());
+  //   } catch (error) {
+  //     console.error("Error fetching latest images:", error);
+  //   }
+  // }
 
-  async function fetchOrders() {
-    try {
-      const orders = await getOrders();
-      setOrders(orders);
-    } catch (error) {
-      console.error("Error fetching orders:", error);
-    }
-  }
+  // async function fetchOrders() {
+  //   try {
+  //     const orders = await getOrders();
+  //     setOrders(orders);
+  //   } catch (error) {
+  //     console.error("Error fetching orders:", error);
+  //   }
+  // }
 
   useEffect(() => {
     const detailsElements = document.querySelectorAll("details");
