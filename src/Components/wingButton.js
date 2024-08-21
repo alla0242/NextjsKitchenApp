@@ -91,12 +91,12 @@ const WingButton = () => {
 
     setSeatSummaries(prev => ({
       ...prev,
-      [`seat${currentSeat}`]: newSeatSummary
+      [`seat${currentSeat}`]: [...(prev[`seat${currentSeat}`] || []), newSeatSummary]
     }));
   }, [totalWings, selectedSauces, selectedSides, selectedSpecialInstructions, currentSeat]);
 
   useEffect(() => {
-    const aggregatedSummary = Object.values(seatSummaries).reduce(
+    const aggregatedSummary = Object.values(seatSummaries).flat().reduce(
       (acc, seat) => {
         acc.totalWings += seat.totalWings;
         acc.sauces = [...acc.sauces, ...seat.sauces];
@@ -178,6 +178,14 @@ const WingButton = () => {
   };
 
   const handleNextSeat = () => {
+    const newWingDetail = {
+      totalWings,
+      sauces: selectedSauces,
+      sides: selectedSides,
+      specialInstructions: selectedSpecialInstructions
+    };
+    setWingDetails([newWingDetail]); // Reset wingDetails to start orders from 1
+
     setCurrentSeat(prevSeat => (prevSeat < 10 ? prevSeat + 1 : 1));
     setTotalWings(0);
     setSelectedSauces([]);
@@ -209,6 +217,10 @@ const WingButton = () => {
     };
     setWingDetails(prev => [...prev, newWingDetail]);
     console.log("Wing order saved:", [...wingDetails, newWingDetail]);
+    setTotalWings(0);
+    setSelectedSauces([]);
+    setSelectedSides([]);
+    setSelectedSpecialInstructions([]);
   };
 
   return (
@@ -424,7 +436,7 @@ const WingButton = () => {
           {tableSummary.specialInstructions.join(", ")}
         </p>
         <h3 className="text-lg">Seat Details:</h3>
-        {Object.entries(seatSummaries).map(([seat, summary], index) => (
+        {Object.entries(seatSummaries).map(([seat, summaries], index) => (
           <div
             key={index}
             className={`space-y-2 ${
@@ -432,19 +444,26 @@ const WingButton = () => {
             } p-2 rounded`}
           >
             <h4 className="text-lg">{seat}</h4>
-            <p>
-              <strong>Total Wings:</strong> {summary.totalWings}
-            </p>
-            <p>
-              <strong>Sauces:</strong> {summary.sauces.join(", ")}
-            </p>
-            <p>
-              <strong>Sides:</strong> {summary.sides.join(", ")}
-            </p>
-            <p>
-              <strong>Special Instructions:</strong>{" "}
-              {summary.specialInstructions.join(", ")}
-            </p>
+            {summaries.map((summary, idx) => (
+              <div key={idx} className="space-y-2">
+                <p>
+                  <strong>Order {idx + 1}:</strong>
+                </p>
+                <p>
+                  <strong>Total Wings:</strong> {summary.totalWings}
+                </p>
+                <p>
+                  <strong>Sauces:</strong> {summary.sauces.join(", ")}
+                </p>
+                <p>
+                  <strong>Sides:</strong> {summary.sides.join(", ")}
+                </p>
+                <p>
+                  <strong>Special Instructions:</strong>{" "}
+                  {summary.specialInstructions.join(", ")}
+                </p>
+              </div>
+            ))}
             <button className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-700">
               Edit Seat
             </button>
