@@ -1,39 +1,25 @@
 "use client";
-import React, { useState, useEffect } from "react";
-import Canvas from "../../Components/Canvas.js";
+import React, { useState, useEffect, useRef } from "react";
 import sendToKitchen from "./createOrder.js";
 import getOrders from "../BoH/getOrders.js";
 import updateOrderState from "../BoH/setOrders.js";
 import completeOrder from "./completeOrder.js";
-import CameraComponent from '../../Components/camera.js';
+import { Camera } from 'react-camera-pro';
 
 const FoH = () => {
   const [orders, setOrders] = useState([]);
   const [lastCheckTime, setLastCheckTime] = useState(null);
   const [isNewOrderOpen, setIsNewOrderOpen] = useState(false);
+  const cameraRef = useRef(null);
 
   function saveImage() {
-    const canvas = document.getElementById("canvas");
-    const ctx = canvas.getContext("2d");
-    const blank = document.createElement("canvas");
-    blank.width = canvas.width;
-    blank.height = canvas.height;
-
-    if (
-      ctx.getImageData(0, 0, canvas.width, canvas.height).data.toString() ===
-      blank
-        .getContext("2d")
-        .getImageData(0, 0, blank.width, blank.height)
-        .data.toString()
-    ) {
-      alert("Canvas is blank. Please draw something before sending.");
-      return;
+    if (cameraRef.current) {
+      const imageData = cameraRef.current.takePhoto();
+      sendToKitchen(imageData);
+      return imageData;
+    } else {
+      alert("Camera is not available. Please try again.");
     }
-
-    const imageData = canvas.toDataURL("image/png");
-    clearCanvas();
-    sendToKitchen(imageData);
-    return imageData;
   }
 
   async function handleUpdateOrderState(id, newState) {
@@ -65,12 +51,6 @@ const FoH = () => {
     fetchOrders();
   }, []);
 
-  function clearCanvas() {
-    const canvas = document.getElementById("canvas");
-    const ctx = canvas.getContext("2d");
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-  }
-
   async function fetchLatestImages() {
     try {
       const orders = await getOrders();
@@ -90,21 +70,6 @@ const FoH = () => {
     }
   }
 
-  useEffect(() => {
-    const detailsElements = document.querySelectorAll("details");
-    detailsElements.forEach((details) => {
-      details.addEventListener("toggle", (event) => {
-        if (details.open) {
-          detailsElements.forEach((el) => {
-            if (el !== details) {
-              el.removeAttribute("open");
-            }
-          });
-        }
-      });
-    });
-  }, [orders]);
-
   return (
     <div className="h-screen w-screen">
       <h1>
@@ -113,14 +78,8 @@ const FoH = () => {
           : "Waiting for first check..."}
       </h1>
       <details open={isNewOrderOpen} onToggle={() => setIsNewOrderOpen(!isNewOrderOpen)}>
-        <summary className="text-2xl font-bold justify-center">{isNewOrderOpen ? "Hide Notepad" : "New Order"}</summary>
-        <Canvas width={370} height={650} />
-        <button
-          className="large-button bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-700"
-          onClick={() => clearCanvas()}
-        >
-          Clear
-        </button>
+        <summary className="text-2xl font-bold justify-center">{isNewOrderOpen ? "Hide Camera" : "New Order"}</summary>
+        <Camera ref={cameraRef} aspectRatio={16 / 9} />
         <button
           className="large-button bg-green-500 text-white py-2 px-4 rounded hover:bg-green-700"
           onClick={() => saveImage()}
@@ -128,7 +87,6 @@ const FoH = () => {
           Send to Kitchen
         </button>
       </details>
-      <CameraComponent />
       {orders.length > 0 ? (
         <ol className="list-decimal">
           {orders.map((order, index) => (
@@ -144,11 +102,9 @@ const FoH = () => {
                   : order.state === "Ready for Pickup"
                   ? "flash-ready-for-pickup"
                   : ""
-                  
               }
               style={{
                 border: "1px solid #ccc",
-                padding: "10px",
               }}
             >
               <details>
