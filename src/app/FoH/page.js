@@ -91,7 +91,7 @@ const FoH = () => {
         <div className="flex flex-col items-center">
           {lastImage ? (
             <div className="relative w-full" >
-              <img src={lastImage} alt="Last Taken" className="absolute top-0 left-0 w-full" />
+              <img src={lastImage} alt="Last Taken" className=" top-0 left-0 w-full" />
             </div>
           ) : (
             <div className="relative w-full " >
@@ -99,22 +99,25 @@ const FoH = () => {
                 ref={cameraRef}
                 aspectRatio={9 / 16}
                 facingMode="environment"
-                className="absolute top-0 left-0 w-full"
+                className=" top-0 left-0 w-full"
               />
             </div>
           )}
-          <button
-            className="large-button bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-700 mt-4"
-            onClick={takePhoto}
-          >
-            Take Photo
-          </button>
-          <button
-            className="large-button bg-green-500 text-white py-2 px-4 rounded hover:bg-green-700 mt-4"
-            onClick={saveImage}
-          >
-            Send to Kitchen
-          </button>
+          {lastImage ? (
+            <button
+              className="large-button bg-green-500 text-white py-2 px-4 rounded hover:bg-green-700 mt-4"
+              onClick={saveImage}
+            >
+              Send to Kitchen
+            </button>
+          ) : (
+            <button
+              className="large-button bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-700 mt-4"
+              onClick={takePhoto}
+            >
+              Take Photo
+            </button>
+          )}
         </div>
       </details>
       {orders.length > 0 ? (
