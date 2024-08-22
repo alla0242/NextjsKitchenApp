@@ -97,7 +97,7 @@ const BoH = () => {
           className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center"
           onClick={() => setSelectedImage(null)}
         >
-          <img src={selectedImage} alt="Selected Order" className="max-w-full max-h-full" />
+          <img src={selectedImage} alt="Selected Order" className="w-full max-h-full" />
         </div>
       )}
     </div>
