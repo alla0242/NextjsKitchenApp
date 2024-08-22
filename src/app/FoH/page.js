@@ -10,15 +10,24 @@ const FoH = () => {
   const [orders, setOrders] = useState([]);
   const [lastCheckTime, setLastCheckTime] = useState(null);
   const [isNewOrderOpen, setIsNewOrderOpen] = useState(false);
+  const [lastImage, setLastImage] = useState(null);
   const cameraRef = useRef(null);
 
-  function saveImage() {
+  function takePhoto() {
     if (cameraRef.current) {
       const imageData = cameraRef.current.takePhoto();
-      sendToKitchen(imageData);
-      return imageData;
+      setLastImage(imageData);
     } else {
       alert("Camera is not available. Please try again.");
+    }
+  }
+
+  function saveImage() {
+    if (lastImage) {
+      sendToKitchen(lastImage);
+      setLastImage(null);
+    } else {
+      alert("No image to send. Please take a photo first.");
     }
   }
 
@@ -79,13 +88,34 @@ const FoH = () => {
       </h1>
       <details open={isNewOrderOpen} onToggle={() => setIsNewOrderOpen(!isNewOrderOpen)}>
         <summary className="text-2xl font-bold justify-center">{isNewOrderOpen ? "Hide Camera" : "New Order"}</summary>
-        <Camera ref={cameraRef} aspectRatio={9 / 16} facingMode="environment" />
-        <button
-          className="large-button bg-green-500 text-white py-2 px-4 rounded hover:bg-green-700"
-          onClick={() => saveImage()}
-        >
-          Send to Kitchen
-        </button>
+        <div className="flex flex-col items-center">
+          {lastImage ? (
+            <div className="relative w-full" style={{ paddingTop: '56.25%' }}>
+              <img src={lastImage} alt="Last Taken" className="absolute top-0 left-0 w-full h-full" />
+            </div>
+          ) : (
+            <div className="relative w-full" style={{ paddingTop: '56.25%' }}>
+              <Camera
+                ref={cameraRef}
+                aspectRatio={9 / 16}
+                facingMode="environment"
+                className="absolute top-0 left-0 w-full h-full"
+              />
+            </div>
+          )}
+          <button
+            className="large-button bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-700 mt-4"
+            onClick={takePhoto}
+          >
+            Take Photo
+          </button>
+          <button
+            className="large-button bg-green-500 text-white py-2 px-4 rounded hover:bg-green-700 mt-4"
+            onClick={saveImage}
+          >
+            Send to Kitchen
+          </button>
+        </div>
       </details>
       {orders.length > 0 ? (
         <ol className="list-decimal">

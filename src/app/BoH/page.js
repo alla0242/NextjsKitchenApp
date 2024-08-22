@@ -6,6 +6,7 @@ import updateOrderState from "./setOrders";
 const BoH = () => {
   const [orders, setOrders] = useState([]);
   const [lastCheckTime, setLastCheckTime] = useState(null);
+  const [selectedImage, setSelectedImage] = useState(null);
 
   useEffect(() => {
     fetchLatestImages();
@@ -57,8 +58,9 @@ const BoH = () => {
                 alt={`Order ${index + 1}, ID : ${order._id}`}
                 width={200}
                 height={200}
-                style={{ margin: "10px" }}
+                style={{ margin: "10px", cursor: "pointer" }}
                 className="bg-white"
+                onClick={() => setSelectedImage(order.imageData)}
               />
               <p>Sent at: {new Date(order.timestamp).toLocaleString()}</p>
               <p>Current State: {order.state}</p>
@@ -89,6 +91,15 @@ const BoH = () => {
         <p>No orders up</p>
       )}
       <button onClick={fetchLatestImages}>Refresh Images</button>
+
+      {selectedImage && (
+        <div
+          className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center"
+          onClick={() => setSelectedImage(null)}
+        >
+          <img src={selectedImage} alt="Selected Order" className="max-w-full max-h-full" />
+        </div>
+      )}
     </div>
   );
 };
