@@ -79,7 +79,7 @@ const FoH = () => {
       </h1>
       <details open={isNewOrderOpen} onToggle={() => setIsNewOrderOpen(!isNewOrderOpen)}>
         <summary className="text-2xl font-bold justify-center">{isNewOrderOpen ? "Hide Camera" : "New Order"}</summary>
-        <Camera ref={cameraRef} aspectRatio={16 / 9} />
+        <Camera ref={cameraRef} aspectRatio={9 / 16} facingMode="environment" />
         <button
           className="large-button bg-green-500 text-white py-2 px-4 rounded hover:bg-green-700"
           onClick={() => saveImage()}
