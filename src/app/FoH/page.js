@@ -90,7 +90,7 @@ const FoH = () => {
         <summary className="text-2xl font-bold justify-center">{isNewOrderOpen ? "Hide Camera" : "New Order"}</summary>
         <div className="flex flex-col items-center">
           {lastImage ? (
-            <div className="relative w-full" style={{ paddingTop: '56.25%' }}>
+            <div className="relative w-full" >
               <img src={lastImage} alt="Last Taken" className="absolute top-0 left-0 w-full h-full" />
             </div>
           ) : (

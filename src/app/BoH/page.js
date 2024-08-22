@@ -18,7 +18,7 @@ const BoH = () => {
   async function fetchLatestImages() {
     try {
       const orders = await getOrders();
-      setOrders(orders);
+      setOrders(orders.filter(order => order.state !== "Order at Table"));
       setLastCheckTime(new Date());
     } catch (error) {
       console.error("Error fetching latest images:", error);
