@@ -90,16 +90,16 @@ const FoH = () => {
         <summary className="text-2xl font-bold justify-center">{isNewOrderOpen ? "Hide Camera" : "New Order"}</summary>
         <div className="flex flex-col items-center">
           {lastImage ? (
-            <div className="relative" >
-              <img src={lastImage} alt="Last Taken" className="absolute top-0 left-0 w-full h-full" />
+            <div className="relative w-full" >
+              <img src={lastImage} alt="Last Taken" className="absolute top-0 left-0 w-full" />
             </div>
           ) : (
-            <div className="relative " >
+            <div className="relative w-full " >
               <Camera
                 ref={cameraRef}
                 aspectRatio={9 / 16}
                 facingMode="environment"
-                className="absolute top-0 left-0 w-full h-full"
+                className="absolute top-0 left-0 w-full"
               />
             </div>
           )}
