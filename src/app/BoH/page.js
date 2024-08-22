@@ -18,7 +18,7 @@ const BoH = () => {
   async function fetchLatestImages() {
     try {
       const orders = await getOrders();
-      setOrders(orders.filter(order => order.state !== "Order at Table"));
+      setOrders(orders);
       setLastCheckTime(new Date());
     } catch (error) {
       console.error("Error fetching latest images:", error);
@@ -43,49 +43,51 @@ const BoH = () => {
       </h1>
       {orders.length > 0 ? (
         <div className="flex flex-wrap">
-          {orders.map((order, index) => (
-            <div
-              className="flex flex-col items-center max-w-fit"
-              key={index}
-              style={{
-                margin: "20px 0",
-                border: "1px solid #ccc",
-                padding: "10px",
-              }}
-            >
-              <img
-                src={order.imageData}
-                alt={`Order ${index + 1}, ID : ${order._id}`}
-                width={200}
-                height={200}
-                style={{ margin: "10px", cursor: "pointer" }}
-                className="bg-white"
-                onClick={() => setSelectedImage(order.imageData)}
-              />
-              <p>Sent at: {new Date(order.timestamp).toLocaleString()}</p>
-              <p>Current State: {order.state}</p>
-              {order.state !== "Ready for Pickup" && (
-                <button
-                  className="large-button bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-700"
-                  onClick={() =>
-                    handleUpdateOrderState(order._id, "Ready for Pickup")
-                  }
-                >
-                  Mark as Ready for Pickup
-                </button>
-              )}
-              {order.state !== "Order at table" && (
-                <button
-                  className="large-button bg-green-500 text-white py-2 px-4 rounded hover:bg-green-700"
-                  onClick={() =>
-                    handleUpdateOrderState(order._id, "Order at table")
-                  }
-                >
-                  Mark as Order at Table
-                </button>
-              )}
-            </div>
-          ))}
+          {orders
+            .filter(order => order.state !== "Order at Table")
+            .map((order, index) => (
+              <div
+                className="flex flex-col items-center max-w-fit"
+                key={index}
+                style={{
+                  margin: "20px 0",
+                  border: "1px solid #ccc",
+                  padding: "10px",
+                }}
+              >
+                <img
+                  src={order.imageData}
+                  alt={`Order ${index + 1}, ID : ${order._id}`}
+                  width={200}
+                  height={200}
+                  style={{ margin: "10px", cursor: "pointer" }}
+                  className="bg-white"
+                  onClick={() => setSelectedImage(order.imageData)}
+                />
+                <p>Sent at: {new Date(order.timestamp).toLocaleString()}</p>
+                <p>Current State: {order.state}</p>
+                {order.state !== "Ready for Pickup" && (
+                  <button
+                    className="large-button bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-700"
+                    onClick={() =>
+                      handleUpdateOrderState(order._id, "Ready for Pickup")
+                    }
+                  >
+                    Mark as Ready for Pickup
+                  </button>
+                )}
+                {order.state !== "Order at table" && (
+                  <button
+                    className="large-button bg-green-500 text-white py-2 px-4 rounded hover:bg-green-700"
+                    onClick={() =>
+                      handleUpdateOrderState(order._id, "Order at table")
+                    }
+                  >
+                    Mark as Order at Table
+                  </button>
+                )}
+              </div>
+            ))}
         </div>
       ) : (
         <p>No orders up</p>
